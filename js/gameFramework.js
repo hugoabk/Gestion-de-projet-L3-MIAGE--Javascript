@@ -1,7 +1,8 @@
+
 // Target Object
 class Target {
 
-  constructor(id,x, y, w, h,vx,vy, couleur) {
+  constructor(id,x, y, w, h,vx,vy, couleur,pointDV) {
     this.id = id;
     this.x = x;
     this.y = y;
@@ -10,6 +11,7 @@ class Target {
     this.vx = vx;
     this.vy = vy;
     this.couleur = couleur;
+    this.pointDV = pointDV;
   }
 
   draw(ctx) {
@@ -78,7 +80,6 @@ var GF = function(){
     // vars for counting frames/s, used by the measureFPS function
     var frameCount = 0;
     var lastTime;
-    var fpsContainer;
     var fps;
 
     // vars for handling inputs
@@ -91,6 +92,8 @@ var GF = function(){
     // var for handling cover
     var takeCover;
 
+    // var for click
+    var boolClick= 0;
 
     var measureFPS = function(newTime){
 
@@ -139,8 +142,8 @@ var GF = function(){
          let vx = 0.5;
          let vy = 0;
          let c = "green";
-
-         let target = new Target(id,x, y, 100, 100, vx, vy, c);
+         let pdv = 10;
+         let target = new Target(id,x, y, 100, 100, vx, vy, c, pdv);
 
          targets.push(target);
 
@@ -171,11 +174,29 @@ var GF = function(){
 
     // update the targets state
     function targetsUpdate(){
-      if(inputStates.mousedown === true && inputStates.mouseButton === 0 ){
+      if(inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick == 1){
+        boolClick = 0;
         targets.forEach((t) => {
-          if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w
-          && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h){
-            targets = targets.filter((target) => target.id !== t.id);
+          if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
+          && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
+            t.pointDV -= 2;
+            console.log(t.pointDV);
+            //targets = targets.filter((target) => target.id !== t.id);
+            } else if(inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
+          && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
+              t.pointDV -= 3;
+              console.log(t.pointDV);
+            } else if (inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
+          && inputStates.mousePos.y > t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
+              t.pointDV -= 4;
+              console.log(t.pointDV);
+            } else if (inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
+          && inputStates.mousePos.y >= t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
+              t.pointDV -= 5;
+              console.log(t.pointDV);
+            }
+           if(t.pointDV<=0){
+              targets = targets.filter((target) => target.id !== t.id);
             }
         })
       }
@@ -203,6 +224,7 @@ var GF = function(){
     // MAIN LOOP
 
     var mainLoop = function(time){
+
         // measure the frames per second
         measureFPS(time);
 
@@ -277,8 +299,7 @@ var GF = function(){
     }
 
     var start = function(){
-        fpsContainer = document.createElement('div');
-        document.body.appendChild(fpsContainer);
+
 
         canvas = document.querySelector("#myCanvas");
         canvas.style.cursor="none";
@@ -322,6 +343,7 @@ var GF = function(){
 
       canvas.addEventListener('mouseup', function (evt) {
           inputStates.mousedown = false;
+          boolClick = 1;
       }, false);
 
       createTargets(2);
