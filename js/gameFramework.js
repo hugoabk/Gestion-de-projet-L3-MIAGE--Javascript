@@ -347,7 +347,6 @@ var GF = function(){
       canvas.addEventListener('mouseup', function (evt) {
           inputStates.mousedown = false;
           boolClick = 1;
-          audio.pause();
           audio.currentTime = 0;
       }, false);
 
