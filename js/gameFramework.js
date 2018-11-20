@@ -95,6 +95,8 @@ var GF = function(){
     // var for click
     var boolClick= 0;
 
+    var audio = new Audio('audio/arme.mp3');
+
     var measureFPS = function(newTime){
 
          // test for the very first invocation
@@ -339,11 +341,14 @@ var GF = function(){
       canvas.addEventListener('mousedown', function (evt) {
             inputStates.mousedown = true;
             inputStates.mouseButton = event.button;
+            audio.play();
       }, false);
 
       canvas.addEventListener('mouseup', function (evt) {
           inputStates.mousedown = false;
           boolClick = 1;
+          audio.pause();
+          audio.currentTime = 0;
       }, false);
 
       createTargets(2);
