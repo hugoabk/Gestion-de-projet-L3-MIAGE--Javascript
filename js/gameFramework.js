@@ -15,8 +15,17 @@ class Target {
   }
 
   draw(ctx) {
+    ctx.save();
+    // draw target
     ctx.fillStyle = this.couleur;
     ctx.fillRect(this.x, this.y, this.w, this.h);
+    // draw healthbar
+    ctx.fillStyle = 'red';
+    ctx.fillRect(this.x-5,this.y - 20, this.w+10 ,10);
+    ctx.fillStyle = 'green';
+    ctx.fillRect(this.x-5,this.y - 20, (this.pointDV/10)*(this.w+10) ,10);
+
+    ctx.restore();
   }
 
   move() {
@@ -38,8 +47,10 @@ class TakeCover {
   }
 
   draw(ctx) {
+    ctx.save();
     ctx.fillStyle = "black";
     ctx.fillRect(this.x, this.y, this.w, this.h);
+    ctx.restore();
   }
 
   moveToTheTop(h) {
@@ -62,7 +73,28 @@ class TakeCover {
     }
   }
 }
+// Magazine Object
+class Magazine{
+  constructor(capacity){
+    this.capacity=capacity;
+  }
 
+  draw(ctx){
+    ctx.save();
+    ctx.fillStyle='rgb(255, 230, 0)';
+    for(var i=0; i<this.capacity;i++){
+      var j=20;
+      ctx.fillRect((i*j),5,10,50);
+    }
+    ctx.restore();
+  }
+
+  remove(){
+    this.capacity -= 1;
+    console.log(this.capacity);
+  }
+
+}
 
 
 // Inits
@@ -93,9 +125,14 @@ var GF = function(){
     var takeCover;
 
     // var for click
-    var boolClick= 0;
+    var boolClick= 1;
 
-    var audio = new Audio('audio/arme.mp3');
+    // var for ammunitions
+    var magazine;
+
+    //var for assets
+    var assets;
+
 
     var measureFPS = function(newTime){
 
@@ -123,7 +160,7 @@ var GF = function(){
       {
       ctx.save();
       ctx.font = "10px sans-serif";
-      ctx.fillText("FPS : " + fps,0,10);
+      ctx.fillText("FPS : " + fps,w-40,10);
       ctx.restore();
       }
     }
@@ -133,6 +170,11 @@ var GF = function(){
        ctx.clearRect(0, 0, w, h);
      }
 
+     // AMMUNITIONS
+     function drawAmmunitions(){
+
+     }
+
 
      // TARGETS
      // create targets
@@ -140,10 +182,10 @@ var GF = function(){
 
        for(let i = 0; i < n; i++) {
          let x = Math.random() * w;
-         let y  = Math.random() * h -100;
+         let y  = h-100;
          let vx = 0.5;
          let vy = 0;
-         let c = "green";
+         let c = "black";
          let pdv = 10;
          let target = new Target(id,x, y, 100, 100, vx, vy, c, pdv);
 
@@ -175,38 +217,41 @@ var GF = function(){
     }
 
     // update the targets state
-    function targetsUpdate(){
-      if(inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick == 1){
+    function targetsAndMagazineUpdate(){
+      if(inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick === 1){
         boolClick = 0;
-        targets.forEach((t) => {
-          if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
-          && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
-            t.pointDV -= 2;
-            console.log(t.pointDV);
-            //targets = targets.filter((target) => target.id !== t.id);
+        if(magazine.capacity > 0){
+          assets.gunShotSound.play();
+          magazine.remove();
+          targets.forEach((t) => {
+            if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
+            && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
+                t.pointDV -= 2;
             } else if(inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
-          && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
-              t.pointDV -= 3;
-              console.log(t.pointDV);
+            && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
+                t.pointDV -= 3;
             } else if (inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
-          && inputStates.mousePos.y > t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
-              t.pointDV -= 4;
-              console.log(t.pointDV);
+            && inputStates.mousePos.y > t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
+                t.pointDV -= 4;
             } else if (inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
-          && inputStates.mousePos.y >= t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
-              t.pointDV -= 5;
-              console.log(t.pointDV);
+            && inputStates.mousePos.y >= t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
+                t.pointDV -= 5;
             }
-           if(t.pointDV<=0){
+            if(t.pointDV<=0){
               targets = targets.filter((target) => target.id !== t.id);
             }
         })
       }
-      targets.forEach((t) => {
-        t.move(ctx);
-      })
-      targetsCollision();
+      else
+      {
+        assets.emptyGunSound.play();
+      }
     }
+    targets.forEach((t) => {
+      t.move(ctx);
+    })
+    targetsCollision();
+  }
 
     // TAKE COVER
     function drawTakeCover(){
@@ -236,6 +281,9 @@ var GF = function(){
         // display the fps on the top-left corner
         displayFPS();
 
+        // draw Magazine
+        drawMagazine();
+
         // draw the targets
         drawTarget();
 
@@ -254,9 +302,16 @@ var GF = function(){
 
     // Update the game components
     function updateGameState(){
-      targetsUpdate();
+      targetsAndMagazineUpdate();
       takeCoverUpdate();
     }
+
+    // MAGAZINE
+
+    function drawMagazine(){
+      magazine.draw(ctx);
+    }
+
 
     // Draw the weapon sight is the mouse position is in the canvas
     function drawSight(){
@@ -314,7 +369,7 @@ var GF = function(){
         ctx.font="20px Arial";
 
 
-      // Add the listeners for the recharging key and the take cover key
+      // Add the listeners for the reloading key and the take cover key
 
       window.addEventListener('keydown', function(event){
           if (event.keyCode === 17) {
@@ -341,19 +396,22 @@ var GF = function(){
       canvas.addEventListener('mousedown', function (evt) {
             inputStates.mousedown = true;
             inputStates.mouseButton = event.button;
-            audio.play();
       }, false);
 
       canvas.addEventListener('mouseup', function (evt) {
           inputStates.mousedown = false;
           boolClick = 1;
-          audio.currentTime = 0;
+
       }, false);
 
       createTargets(2);
       takeCover = new TakeCover(w,h);
+      magazine = new Magazine(10);
 
-      requestAnimationFrame(mainLoop);
+      loadAssets((assetsReadyToBeUsed) => {
+        assets = assetsReadyToBeUsed;
+        requestAnimationFrame(mainLoop);
+      })
     };
 
 
