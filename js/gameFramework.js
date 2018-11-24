@@ -1,102 +1,3 @@
-
-// Target Object
-class Target {
-
-  constructor(id,x, y, w, h,vx,vy, couleur,pointDV) {
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.vx = vx;
-    this.vy = vy;
-    this.couleur = couleur;
-    this.pointDV = pointDV;
-  }
-
-  draw(ctx) {
-    ctx.save();
-    // draw target
-    ctx.fillStyle = this.couleur;
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-    // draw healthbar
-    ctx.fillStyle = 'red';
-    ctx.fillRect(this.x-5,this.y - 20, this.w+10 ,10);
-    ctx.fillStyle = 'green';
-    ctx.fillRect(this.x-5,this.y - 20, (this.pointDV/10)*(this.w+10) ,10);
-
-    ctx.restore();
-  }
-
-  move() {
-    this.x += this.vx;
-    this.y += this.vy;
-  }
-
-}
-
-// Take Cover Object
-class TakeCover {
-
-  constructor(w,h) {
-    this.x = 0;
-    this.y = h;
-    this.w = w;
-    this.h = h;
-    this.vy = 20;
-  }
-
-  draw(ctx) {
-    ctx.save();
-    ctx.fillStyle = "black";
-    ctx.fillRect(this.x, this.y, this.w, this.h);
-    ctx.restore();
-  }
-
-  moveToTheTop(h) {
-    if(this.y > h*0.25){
-      this.y -= this.vy;
-    }
-    else
-    {
-      this.y = h*0.25;
-    }
-  }
-
-  moveToTheBottom(h){
-    if(this.y < h){
-      this.y += this.vy;
-    }
-    else
-    {
-      this.y = h;
-    }
-  }
-}
-// Magazine Object
-class Magazine{
-  constructor(capacity){
-    this.capacity=capacity;
-  }
-
-  draw(ctx){
-    ctx.save();
-    ctx.fillStyle='rgb(255, 230, 0)';
-    for(var i=0; i<this.capacity;i++){
-      var j=20;
-      ctx.fillRect((i*j),5,10,50);
-    }
-    ctx.restore();
-  }
-
-  remove(){
-    this.capacity -= 1;
-    console.log(this.capacity);
-  }
-
-}
-
-
 // Inits
 window.onload = function init() {
   var game = new GF();
@@ -129,6 +30,9 @@ var GF = function(){
 
     // var for ammunitions
     var magazine;
+    var reloading;
+    var isReloading = false;
+    var id;
 
     //var for assets
     var assets;
@@ -170,14 +74,8 @@ var GF = function(){
        ctx.clearRect(0, 0, w, h);
      }
 
-     // AMMUNITIONS
-     function drawAmmunitions(){
-
-     }
-
-
-     // TARGETS
-     // create targets
+    // TARGETS
+    // create targets
      function createTargets(n) {
 
        for(let i = 0; i < n; i++) {
@@ -215,14 +113,43 @@ var GF = function(){
         }
       });
     }
+    function checkForReload(){
+      if(inputStates.r === true){
+        if(magazine.capacity<magazine.capacityMax){
+          reloading = true;
+        }
+        else
+        {
+          // if capacity already full
+        }
+      }
+      
+      if(magazine.capacity<magazine.capacityMax && reloading === true){
+        if(isReloading === false){
+          assets.reloadSound.play();
+          id = setInterval(reload,500);
+          isReloading = true;
+        }
+      }
+      else
+      {
+        clearInterval(id);
+        isReloading = false;
+        reloading = false;
+        assets.reloadSound.stop();
+      }
+    }
 
-    // update the targets state
+    function reload(){
+        magazine.capacity += 1;
+     }
+    // update the targets and magazine state
     function targetsAndMagazineUpdate(){
       if(inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick === 1){
         boolClick = 0;
-        if(magazine.capacity > 0){
+        if(magazine.capacity > 0 && reloading !== true){
           assets.gunShotSound.play();
-          magazine.remove();
+          magazine.capacity -= 1;
           targets.forEach((t) => {
             if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
             && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
@@ -304,6 +231,7 @@ var GF = function(){
     function updateGameState(){
       targetsAndMagazineUpdate();
       takeCoverUpdate();
+      checkForReload();
     }
 
     // MAGAZINE
