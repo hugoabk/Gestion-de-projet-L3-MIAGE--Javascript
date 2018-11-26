@@ -14,6 +14,8 @@ var GF = function(){
     var frameCount = 0;
     var lastTime;
     var fps;
+    var score;
+    var val_score;
 
     // vars for handling inputs
     var inputStates = {};
@@ -66,6 +68,20 @@ var GF = function(){
       ctx.font = "10px sans-serif";
       ctx.fillText("FPS : " + fps,w-40,10);
       ctx.restore();
+      }
+    }
+
+    function addScore(inc) {
+      var new_val = Number(val_score);
+      new_val += inc;
+      val_score = new_val.toString();
+    }
+
+    // display Score
+    function displayScore(){
+      if(val_score !== undefined) {
+        score = new Score(val_score,w-40,30);
+        score.draw(ctx);
       }
     }
 
@@ -123,7 +139,7 @@ var GF = function(){
           // if capacity already full
         }
       }
-      
+
       if(magazine.capacity<magazine.capacityMax && reloading === true){
         if(isReloading === false){
           assets.reloadSound.play();
@@ -154,15 +170,19 @@ var GF = function(){
             if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
             && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
                 t.pointDV -= 2;
+                addScore(10);
             } else if(inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
             && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
                 t.pointDV -= 3;
+                addScore(25);
             } else if (inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
             && inputStates.mousePos.y > t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
                 t.pointDV -= 4;
+                addScore(50);
             } else if (inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
             && inputStates.mousePos.y >= t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
                 t.pointDV -= 5;
+                addScore(100);
             }
             if(t.pointDV<=0){
               targets = targets.filter((target) => target.id !== t.id);
@@ -207,6 +227,9 @@ var GF = function(){
 
         // display the fps on the top-left corner
         displayFPS();
+
+        // display the score on the top-left corner
+        displayScore();
 
         // draw Magazine
         drawMagazine();
@@ -335,6 +358,7 @@ var GF = function(){
       createTargets(2);
       takeCover = new TakeCover(w,h);
       magazine = new Magazine(10);
+      val_score = "0";
 
       loadAssets((assetsReadyToBeUsed) => {
         assets = assetsReadyToBeUsed;
