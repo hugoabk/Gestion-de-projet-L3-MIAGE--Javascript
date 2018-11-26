@@ -80,7 +80,7 @@ var GF = function(){
     // display Score
     function displayScore(){
       if(val_score !== undefined) {
-        score = new Score(val_score,w-40,30);
+        score = new Score("Score : " + val_score,10,80);
         score.draw(ctx);
       }
     }

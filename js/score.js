@@ -9,7 +9,7 @@ class Score {
     draw(ctx) {
         ctx.save();
 
-        ctx.font = "10px sans-serif";
+        ctx.font = "16px sans-serif";
         ctx.fillStyle = "black";
         ctx.fillText(this.value, this.x, this.y);
 
