@@ -3,8 +3,9 @@ var assetsToLoadURLs = {
     emptyGunSound: { url: "assets/audio/emptyGunSound.wav", buffer: false, loop: false, volume: 1.0 },
     reloadSound: { url: "assets/audio/reloadSound.wav", buffer : false, loop: true, volume :1.0},
     firstBackground: { url: "assets/images/background_1.png"},
+    secondBackground: { url: "assets/images/background_2.jpg"},
     spriteSheetLeft: {url: "assets/images/spriteSheetLeft.png"},
-    spriteSheetRight: {url: "assets/images/spriteSheetLeft.png"}
+    spriteSheetRight: {url: "assets/images/spriteSheetRight.png"}
 };
 
 function loadAssets(callback) {

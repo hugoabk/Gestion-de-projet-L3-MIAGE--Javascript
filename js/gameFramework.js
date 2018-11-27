@@ -34,10 +34,16 @@ var GF = function(){
     var magazine;
     var reloading;
     var isReloading = false;
-    var id;
+    var idReload;
 
     //var for assets
     var assets;
+
+    // vars for backgrounds
+    var forest;
+    var city;
+    var idBackground;
+    var backgroundsAreMoving = false;
 
 
     var measureFPS = function(newTime){
@@ -143,13 +149,13 @@ var GF = function(){
       if(magazine.capacity<magazine.capacityMax && reloading === true){
         if(isReloading === false){
           assets.reloadSound.play();
-          id = setInterval(reload,500);
+          idReload = setInterval(reload,500);
           isReloading = true;
         }
       }
       else
       {
-        clearInterval(id);
+        clearInterval(idReload);
         isReloading = false;
         reloading = false;
         assets.reloadSound.stop();
@@ -217,11 +223,29 @@ var GF = function(){
 
     // draw background
     function drawBackground(){
-      ctx.save();
+      forest.draw(ctx,w,h);
+      city.draw(ctx,w,h);
+    }
 
-      ctx.drawImage(assets.firstBackground,0,0,w,h);
+    function moveBackgrounds(){
+      if(city.x <= 0){
+        forest.move();
+        city.move();
+      }
+      else
+      {
+        clearInterval(idBackground);
+        backgroundsAreMoving = false;
+      }
+    }
 
-      ctx.restore();
+    // switch level
+    function nextLevel(level){
+      backgroundsAreMoving = true;
+      if(level === 2){
+      createTargets(3);
+      idBackground = setInterval(moveBackgrounds,1000/60);
+      }
     }
     // MAIN LOOP
 
@@ -234,24 +258,37 @@ var GF = function(){
         clearCanvas();
         // draw background
         drawBackground();
-        // display the fps on the top-left corner
-        displayFPS();
 
-        // display the score on the top-left corner
-        displayScore();
+        if(backgroundsAreMoving === false){
+          // display the fps on the top-left corner
+          displayFPS();
 
-        // draw Magazine
-        drawMagazine();
+          // display the score on the top-left corner
+          displayScore();
 
-        // draw the targets
-        drawTarget();
+          // draw Magazine
+          drawMagazine();
 
-        // take cover
-        drawTakeCover();
+          // draw the targets
+          drawTarget();
 
-        // draw the weapon sight
-        drawSight();
+          // take cover
+          drawTakeCover();
 
+          // draw the weapon sight
+          drawSight();
+        }
+        else
+        {
+          ctx.save()
+
+          ctx.fillStyle = "black";
+
+          ctx.fillRect(0, 0, w, 50);
+          ctx.fillRect(0, h - 50, w, 50);
+
+          ctx.restore();
+        }
         // Check inputs and update the game state
         updateGameState();
 
@@ -264,6 +301,9 @@ var GF = function(){
       targetsAndMagazineUpdate();
       takeCoverUpdate();
       checkForReload();
+      if(targets.length == 0 && backgroundsAreMoving == false){
+        nextLevel(2);
+      }
     }
 
     // MAGAZINE
@@ -276,6 +316,9 @@ var GF = function(){
 
     function allAssetsLoaded(assetsLoaded){
         assets = assetsLoaded;
+        forest = new Background(0,0,assets.firstBackground);
+        city = new Background(-w,0, assets.secondBackground);
+
     }
 
 
