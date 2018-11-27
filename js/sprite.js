@@ -1,51 +1,8 @@
-var SPRITESHEET_URL = "https://i.imgur.com/PYN3bgt.png";
-var SPRITESHEET_URL2 = "https://i.imgur.com/Ncs2Asg.png";
-var SPRITE_WIDTH = 134;
-var SPRITE_HEIGHT = 166;
-
-
-var canvas, ctx;
-var spritesheet;
-var ennemiGauche;
-var stringsprite;
-
-window.onload = function() {
-  canvas = document.getElementById("canvas");
-  ctx = canvas.getContext("2d");
-
-  // load the spritesheet
-  spritesheet = new Image();
-  spritesheet.src = SPRITESHEET_URL;
-
-
-  spritesheet2 = new Image();
-  spritesheet2.src =SPRITESHEET_URL2;
-
-  // Called when the spritesheet has been loaded
-  spritesheet.onload = function() {
-
-    // Resize small canvas to the size of the spritesheet image
-    canvas.width = SPRITE_WIDTH;
-    canvas.height = SPRITE_HEIGHT;
-
-    // get the sprite array
-    stringsprite = "droit";
-    ennemiGauche = new Sprite(stringsprite);
-
-
-    //changer ici l'image ou l'on récupère les sprites
-    ennemiGauche.extractSprites(spritesheet2, 45,55);
-    ennemiGauche.setNbImagesPerSecond(6);
-
-    requestAnimationFrame(mainloop);
-  }; // onload
-};
-
 function mainloop() {
   // clear the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   // draw sprite at 0, 0 in the small canvas
-  ennemiGauche.draw(ctx, 0, 0, 1);
+  ennemileft.draw(ctx, 0, 0, 1);
 
   requestAnimationFrame(mainloop);
 }
@@ -73,27 +30,26 @@ function SpriteImage(img, x, y, width, height) {
   function Sprite(stringsprite) {
     this.spriteArray = [];
     this.currentFrame = 0;
-    this.delayBetweenFrames = 10;
+    this.delayBetweenFrames = 1000/6;
 
-    this.extractSprites = function(spritesheet, spriteWidth, spriteHeight) {
-
+    this.extractSprites = function(spritesheet) {
       switch (stringsprite) {
 
-        case "gauche":
+        case "left":
         // position de base pas implémenté
-        var gauche = new SpriteImage(spritesheet, 280 , 135, 45, 55);
+        var left = new SpriteImage(spritesheet, 280 , 135, 45, 55);
 
 
-        var gauche2 = new SpriteImage(spritesheet, 97 , 134, 45, 55);
-        var gauche3 = new SpriteImage(spritesheet, 145 , 68, 45, 55);
-        var gauche4 = new SpriteImage(spritesheet, 97 , 4, 45, 55);
+        var left2 = new SpriteImage(spritesheet, 97 , 134, 45, 55);
+        var left3 = new SpriteImage(spritesheet, 145 , 68, 45, 55);
+        var left4 = new SpriteImage(spritesheet, 97 , 4, 45, 55);
 
 
-        this.spriteArray.push(gauche2);
-        this.spriteArray.push(gauche3);
-        this.spriteArray.push(gauche4);
-        this.spriteArray.push(gauche3);
-        this.spriteArray.push(gauche2);
+        this.spriteArray.push(left2);
+        this.spriteArray.push(left3);
+        this.spriteArray.push(left4);
+        this.spriteArray.push(left3);
+        this.spriteArray.push(left2);
 
 
         break;
@@ -123,21 +79,21 @@ function SpriteImage(img, x, y, width, height) {
         this.spriteArray.push(explosion4);
         break;
 
-        break;
 
         // marche uniquement avec la deuxième image 
-        case "droit":
+        case "right":
 
-        var droit2 = new SpriteImage(spritesheet, 492 , 134, 45, 55);
-        var droit3 = new SpriteImage(spritesheet, 442 , 68, 45, 55);
-        var droit4 = new SpriteImage(spritesheet, 492 , 4, 45, 55);
+        var right2 = new SpriteImage(spritesheet, 492 , 134, 45, 55);
+        var right3 = new SpriteImage(spritesheet, 442 , 68, 45, 55);
+        var right4 = new SpriteImage(spritesheet, 492 , 4, 45, 55);
 
 
-        this.spriteArray.push(droit2);
-        this.spriteArray.push(droit3);
-        this.spriteArray.push(droit4);
-        this.spriteArray.push(droit3);
-        this.spriteArray.push(droit2);
+        this.spriteArray.push(right2);
+        this.spriteArray.push(right3);
+        this.spriteArray.push(right4);
+        this.spriteArray.push(right3);
+        this.spriteArray.push(right2);
+        break;
 
         default:
         console.log("ERREUR");

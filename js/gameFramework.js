@@ -102,12 +102,13 @@ var GF = function(){
 
        for(let i = 0; i < n; i++) {
          let x = Math.random() * w;
-         let y  = h-100;
+         let y  = h-200;
          let vx = 0.5;
          let vy = 0;
          let c = "black";
          let pdv = 10;
-         let target = new Target(id,x, y, 100, 100, vx, vy, c, pdv);
+         let target = new Target(id,x, y, vx, pdv, "right");
+         target.extractSprites(assets.spriteSheetRight);
 
          targets.push(target);
 
@@ -127,11 +128,15 @@ var GF = function(){
         if(((t.x+t.w) > w)) {
         t.vx = -t.vx;
         t.x  = w - t.w;
-        }
+        t.sprite = new Sprite("left");
+        t.extractSprites(assets.spriteSheetLeft);
+       }
 
         if(t.x < 0) {
         t.vx = -t.vx;
         t.x = 0
+        t.sprite = new Sprite("right");
+        t.extractSprites(assets.spriteSheetRight);
         }
       });
     }
@@ -191,7 +196,10 @@ var GF = function(){
                 addScore(100);
             }
             if(t.pointDV<=0){
-              targets = targets.filter((target) => target.id !== t.id);
+              let index = targets.findIndex(item => item.id === t.id);
+              targets[index].sprite = new Sprite("explosion");
+              targets[index].extractSprites(assets.spriteSheetLeft);
+              setTimeout(()=>{targets = targets.filter((target) => target.id !== t.id);},100);
             }
         })
       }
@@ -318,6 +326,8 @@ var GF = function(){
         assets = assetsLoaded;
         forest = new Background(0,0,assets.firstBackground);
         city = new Background(-w,0, assets.secondBackground);
+        createTargets(3);
+
 
     }
 
@@ -413,7 +423,6 @@ var GF = function(){
 
       }, false);
 
-      createTargets(2);
       takeCover = new TakeCover(w,h);
       magazine = new Magazine(10);
       val_score = "0";
