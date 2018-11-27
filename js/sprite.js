@@ -1,6 +1,7 @@
-var SPRITESHEET_URL = "https://i.imgur.com/ZigaC0W.jpg";
-var SPRITE_WIDTH = 78;
-var SPRITE_HEIGHT = 90;
+var SPRITESHEET_URL = "https://i.imgur.com/PYN3bgt.png";
+var SPRITESHEET_URL2 = "https://i.imgur.com/Ncs2Asg.png";
+var SPRITE_WIDTH = 134;
+var SPRITE_HEIGHT = 166;
 
 
 var canvas, ctx;
@@ -9,29 +10,35 @@ var ennemiGauche;
 var stringsprite;
 
 window.onload = function() {
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
+  canvas = document.getElementById("canvas");
+  ctx = canvas.getContext("2d");
 
-    // load the spritesheet
-    spritesheet = new Image();
-    spritesheet.src = SPRITESHEET_URL;
+  // load the spritesheet
+  spritesheet = new Image();
+  spritesheet.src = SPRITESHEET_URL;
 
-    // Called when the spritesheet has been loaded
-    spritesheet.onload = function() {
 
-      // Resize small canvas to the size of the spritesheet image
-      canvas.width = SPRITE_WIDTH;
-      canvas.height = SPRITE_HEIGHT;
+  spritesheet2 = new Image();
+  spritesheet2.src =SPRITESHEET_URL2;
 
-      // get the sprite array
-      stringsprite = "explosion";
-      ennemiGauche = new Sprite(stringsprite);
+  // Called when the spritesheet has been loaded
+  spritesheet.onload = function() {
 
-      ennemiGauche.extractSprites(spritesheet, 26, 30);
-      ennemiGauche.setNbImagesPerSecond(20);
+    // Resize small canvas to the size of the spritesheet image
+    canvas.width = SPRITE_WIDTH;
+    canvas.height = SPRITE_HEIGHT;
 
-      requestAnimationFrame(mainloop);
-    }; // onload
+    // get the sprite array
+    stringsprite = "droit";
+    ennemiGauche = new Sprite(stringsprite);
+
+
+    //changer ici l'image ou l'on récupère les sprites
+    ennemiGauche.extractSprites(spritesheet2, 45,55);
+    ennemiGauche.setNbImagesPerSecond(6);
+
+    requestAnimationFrame(mainloop);
+  }; // onload
 };
 
 function mainloop() {
@@ -47,120 +54,130 @@ function mainloop() {
 // Sprite utility functions
 // ------------------------
 function SpriteImage(img, x, y, width, height) {
-   this.img = img;  // the whole image that contains all sprites
-   this.x = x;      // x, y position of the sprite image in the whole image
-   this.y = y;
-   this.width = width;   // width and height of the sprite image
-   this.height = height;
-   // xPos and yPos = position where the sprite should be drawn,
-   // scale = rescaling factor between 0 and 1
-   this.draw = function(ctx, xPos, yPos, scale) {
-      ctx.drawImage(this.img,
-                    this.x, this.y, // x, y, width and height of img to extract
-                    this.width, this.height,
-                    xPos, yPos,     // x, y, width and height of img to draw
-                    this.width*scale, this.height*scale);
-   };
-}
-
-function Sprite(stringsprite) {
-  this.spriteArray = [];
-  this.currentFrame = 0;
-  this.delayBetweenFrames = 10;
-
-  this.extractSprites = function(spritesheet, spriteWidth, spriteHeight) {
-
-    switch (stringsprite) {
-
-  case "gauche":
-      var gauche = new SpriteImage(spritesheet, 24 , 0, spriteWidth, spriteHeight);
-      var gauche2 = new SpriteImage(spritesheet, 47 , 0, spriteWidth, spriteHeight);
-      var gauche3 = new SpriteImage(spritesheet, 180 , 0, spriteWidth, spriteHeight);
-
-      this.spriteArray.push(gauche2);
-      this.spriteArray.push(gauche2);
-      this.spriteArray.push(gauche2);
-      this.spriteArray.push(gauche2);
-      this.spriteArray.push(gauche3);
-      this.spriteArray.push(gauche3);
-      this.spriteArray.push(gauche3);
-      this.spriteArray.push(gauche3);
-
-      break;
-
-  case "tir":
-
-        var tir1 = new SpriteImage(spritesheet, 60 , 78, 18, spriteHeight);
-        var tir2 = new SpriteImage(spritesheet, 185 , 78, 18, spriteHeight);
-        this.spriteArray.push(tir1);
-        this.spriteArray.push(tir1);
-        this.spriteArray.push(tir1);
-        this.spriteArray.push(tir1);
-        this.spriteArray.push(tir1);
-        this.spriteArray.push(tir2);
-        this.spriteArray.push(tir2);
-        break;
-
-  case "explosion":
-
-        var explosion1 = new SpriteImage(spritesheet, 111 , 150, 25, spriteHeight);
-        var explosion2 = new SpriteImage(spritesheet, 138 , 150, 25, spriteHeight);
-        var explosion3 = new SpriteImage(spritesheet, 168 , 150, 25, spriteHeight);
-        var explosion4 = new SpriteImage(spritesheet, 201 , 150, 25, spriteHeight);
-        this.spriteArray.push(explosion1);
-        this.spriteArray.push(explosion1);
-        this.spriteArray.push(explosion1);
-        this.spriteArray.push(explosion2);
-        this.spriteArray.push(explosion2);
-        this.spriteArray.push(explosion2);
-        this.spriteArray.push(explosion3);
-        this.spriteArray.push(explosion3);
-        this.spriteArray.push(explosion3);
-        this.spriteArray.push(explosion4);
-        this.spriteArray.push(explosion4);
-        this.spriteArray.push(explosion4);
-        break;
-
-    break;
-  default:
-    console.log("ERREUR");
-}
-
-
-
+  this.img = img;  // the whole image that contains all sprites
+  this.x = x;      // x, y position of the sprite image in the whole image
+  this.y = y;
+  this.width = width;   // width and height of the sprite image
+  this.height = height;
+  // xPos and yPos = position where the sprite should be drawn,
+  // scale = rescaling factor between 0 and 1
+  this.draw = function(ctx, xPos, yPos, scale) {
+    ctx.drawImage(this.img,
+      this.x, this.y, // x, y, width and height of img to extract
+      this.width, this.height,
+      xPos, yPos,     // x, y, width and height of img to draw
+      this.width*scale, this.height*scale);
+    };
   }
 
-  this.then = performance.now();
-  this.totalTimeSinceLastRedraw = 0;
+  function Sprite(stringsprite) {
+    this.spriteArray = [];
+    this.currentFrame = 0;
+    this.delayBetweenFrames = 10;
 
-  this.draw = function(ctx, x, y) {
-    // Use time based animation to draw only a few images per second
-    var now = performance.now();
-    var delta = now - this.then;
+    this.extractSprites = function(spritesheet, spriteWidth, spriteHeight) {
 
-    // draw currentSpriteImage
-    var currentSpriteImage = this.spriteArray[this.currentFrame];
-    // x, y, scale. 1 = size unchanged
-    currentSpriteImage.draw(ctx, x, y, 3);
+      switch (stringsprite) {
 
-    // if the delay between images is elapsed, go to the next one
-    if (this.totalTimeSinceLastRedraw > this.delayBetweenFrames) {
-       // Go to the next sprite image
-      this.currentFrame++;
-      this.currentFrame %=  this.spriteArray.length;
+        case "gauche":
+        // position de base pas implémenté
+        var gauche = new SpriteImage(spritesheet, 280 , 135, 45, 55);
 
-      // reset the total time since last image has been drawn
-      this.totalTimeSinceLastRedraw = 0;
-    } else {
-      // sum the total time since last redraw
-     this. totalTimeSinceLastRedraw += delta;
+
+        var gauche2 = new SpriteImage(spritesheet, 97 , 134, 45, 55);
+        var gauche3 = new SpriteImage(spritesheet, 145 , 68, 45, 55);
+        var gauche4 = new SpriteImage(spritesheet, 97 , 4, 45, 55);
+
+
+        this.spriteArray.push(gauche2);
+        this.spriteArray.push(gauche3);
+        this.spriteArray.push(gauche4);
+        this.spriteArray.push(gauche3);
+        this.spriteArray.push(gauche2);
+
+
+        break;
+
+        case "tir":
+
+        var tir1 = new SpriteImage(spritesheet, 234 , 134, 45, 55);
+        var tir2 = new SpriteImage(spritesheet, 468 , 134, 45, 55);
+        this.spriteArray.push(tir1);
+        this.spriteArray.push(tir1);
+        this.spriteArray.push(tir1);
+        this.spriteArray.push(tir1);
+        this.spriteArray.push(tir1);
+        this.spriteArray.push(tir2);
+        this.spriteArray.push(tir2);
+        break;
+
+        case "explosion":
+
+        var explosion1 = new SpriteImage(spritesheet, 280 , 313, 45, 55);
+        var explosion2 = new SpriteImage(spritesheet, 330 , 315, 45, 55);
+        var explosion3 = new SpriteImage(spritesheet, 390 , 312, 45, 55);
+        var explosion4 = new SpriteImage(spritesheet, 450 , 312, 45, 55);
+        this.spriteArray.push(explosion1);
+        this.spriteArray.push(explosion2);
+        this.spriteArray.push(explosion3);
+        this.spriteArray.push(explosion4);
+        break;
+
+        break;
+
+        // marche uniquement avec la deuxième image 
+        case "droit":
+
+        var droit2 = new SpriteImage(spritesheet, 492 , 134, 45, 55);
+        var droit3 = new SpriteImage(spritesheet, 442 , 68, 45, 55);
+        var droit4 = new SpriteImage(spritesheet, 492 , 4, 45, 55);
+
+
+        this.spriteArray.push(droit2);
+        this.spriteArray.push(droit3);
+        this.spriteArray.push(droit4);
+        this.spriteArray.push(droit3);
+        this.spriteArray.push(droit2);
+
+        default:
+        console.log("ERREUR");
+      }
+
+
+
     }
 
-    this.then = now;
-  };
+    this.then = performance.now();
+    this.totalTimeSinceLastRedraw = 0;
 
-  this.setNbImagesPerSecond = function(nb) {
-    // elay in ms between images
-    this.delayBetweenFrames = 1000 / nb;
-  };
-}
+    this.draw = function(ctx, x, y) {
+      // Use time based animation to draw only a few images per second
+      var now = performance.now();
+      var delta = now - this.then;
+
+      // draw currentSpriteImage
+      var currentSpriteImage = this.spriteArray[this.currentFrame];
+      // x, y, scale. 1 = size unchanged
+      currentSpriteImage.draw(ctx, x, y, 3);
+
+      // if the delay between images is elapsed, go to the next one
+      if (this.totalTimeSinceLastRedraw > this.delayBetweenFrames) {
+        // Go to the next sprite image
+        this.currentFrame++;
+        this.currentFrame %=  this.spriteArray.length;
+
+        // reset the total time since last image has been drawn
+        this.totalTimeSinceLastRedraw = 0;
+      } else {
+        // sum the total time since last redraw
+        this. totalTimeSinceLastRedraw += delta;
+      }
+
+      this.then = now;
+    };
+
+    this.setNbImagesPerSecond = function(nb) {
+      // elay in ms between images
+      this.delayBetweenFrames = 1000 / nb;
+    };
+  }
