@@ -80,7 +80,7 @@ var GF = function(){
     // display Score
     function displayScore(){
       if(val_score !== undefined) {
-        score = new Score("Score : " + val_score,10,80);
+        score = new Score("Score : " + val_score,5,80);
         score.draw(ctx);
       }
     }
@@ -215,6 +215,14 @@ var GF = function(){
       }
     }
 
+    // draw background
+    function drawBackground(){
+      ctx.save();
+
+      ctx.drawImage(assets.firstBackground,0,0,w,h);
+
+      ctx.restore();
+    }
     // MAIN LOOP
 
     var mainLoop = function(time){
@@ -224,7 +232,8 @@ var GF = function(){
 
         // clear the canvas
         clearCanvas();
-
+        // draw background
+        drawBackground();
         // display the fps on the top-left corner
         displayFPS();
 
@@ -261,6 +270,12 @@ var GF = function(){
 
     function drawMagazine(){
       magazine.draw(ctx);
+    }
+
+    // ASSETS
+
+    function allAssetsLoaded(assetsLoaded){
+        assets = assetsLoaded;
     }
 
 
@@ -360,8 +375,8 @@ var GF = function(){
       magazine = new Magazine(10);
       val_score = "0";
 
-      loadAssets((assetsReadyToBeUsed) => {
-        assets = assetsReadyToBeUsed;
+      loadAssets((assetsLoaded) => {
+        allAssetsLoaded(assetsLoaded);
         requestAnimationFrame(mainLoop);
       })
     };
