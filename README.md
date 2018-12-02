@@ -16,6 +16,6 @@ Les modules qui devront être développés :
 - module de sauvegarde des scores et classement
 
 Les commandes sont les suivantes :
-Clic gauche de la souris -> Tirer
-Touche R -> Recharger
-Touche Ctrl -> Se mettre à couvert
+- Clic gauche de la souris -> Tirer
+- Touche R -> Recharger
+- Touche Ctrl -> Se mettre à couvert
