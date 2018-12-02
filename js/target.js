@@ -10,6 +10,7 @@ class Target {
         this.h = 166;
         this.vx = vx;
         this.pointDV = pointDV;
+        this.isShooting = false;
     }
 
     extractSprites(spriteSheet){
@@ -22,7 +23,7 @@ class Target {
 
     draw(ctx) {
         ctx.save();
-        
+
         this.sprite.draw(ctx,this.x,this.y);
 
         ctx.fillStyle = 'red';

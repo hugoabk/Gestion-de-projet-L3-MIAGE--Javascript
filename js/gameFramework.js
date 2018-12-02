@@ -140,6 +140,19 @@ var GF = function(){
         }
       });
     }
+
+    function haveToShoot() {
+      targets.forEach((t) => {
+        var v = parseInt(Math.random() * 1000);
+        if(v == 1 && !t.isShooting) {
+          t.isShooting = true;
+          t.vx = 0;
+          t.sprite = new Sprite("tir");
+          t.extractSprites(assets.spriteSheetLeft);
+        }
+      });
+    }
+
     function checkForReload(){
       if(inputStates.r === true){
         if(magazine.capacity<magazine.capacityMax){
@@ -309,6 +322,7 @@ var GF = function(){
       targetsAndMagazineUpdate();
       takeCoverUpdate();
       checkForReload();
+      haveToShoot();
       if(targets.length == 0 && backgroundsAreMoving == false){
         nextLevel(2);
       }
@@ -327,8 +341,6 @@ var GF = function(){
         forest = new Background(0,0,assets.firstBackground);
         city = new Background(-w,0, assets.secondBackground);
         createTargets(3);
-
-
     }
 
 

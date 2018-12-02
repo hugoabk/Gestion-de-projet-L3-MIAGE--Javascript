@@ -15,19 +15,7 @@ Les modules qui devront être développés :
 - module de gestion évènement souris / clavier
 - module de sauvegarde des scores et classement
 
-
-To DO List pour le prototype : 
-
-Cible -> carrée ou rond 
-      -> plusieurs zones de hitbox
-      -> la cible change de couleur en fonction de la zone visée
-
-Transition -> faire une transition d’image
-
-Changer la souris -> faire le viseur 
-
-Se mettre à couvert -> relié une touche et faire monter un rectangle noir 
-
-
-Bonus : 
--> son tir 
+Les commandes sont les suivantes :
+Clic gauche de la souris -> Tirer
+Touche R -> Recharger
+Touche Ctrl -> Se mettre à couvert
