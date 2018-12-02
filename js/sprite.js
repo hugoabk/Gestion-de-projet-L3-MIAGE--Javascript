@@ -1,11 +1,3 @@
-function mainloop() {
-  // clear the canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // draw sprite at 0, 0 in the small canvas
-  ennemileft.draw(ctx, 0, 0, 1);
-
-  requestAnimationFrame(mainloop);
-}
 
 // ------------------------
 // Sprite utility functions
@@ -74,13 +66,21 @@ function SpriteImage(img, x, y, width, height) {
         var explosion3 = new SpriteImage(spritesheet, 390 , 312, 45, 55);
         var explosion4 = new SpriteImage(spritesheet, 450 , 312, 45, 55);
         this.spriteArray.push(explosion1);
+        this.spriteArray.push(explosion1);
+        this.spriteArray.push(explosion1);
+        this.spriteArray.push(explosion2);
+        this.spriteArray.push(explosion2);
         this.spriteArray.push(explosion2);
         this.spriteArray.push(explosion3);
+        this.spriteArray.push(explosion3);
+        this.spriteArray.push(explosion3);
+        this.spriteArray.push(explosion4);
+        this.spriteArray.push(explosion4);
         this.spriteArray.push(explosion4);
         break;
 
 
-        // marche uniquement avec la deuxième image 
+        // marche uniquement avec la deuxième image
         case "right":
 
         var right2 = new SpriteImage(spritesheet, 492 , 134, 45, 55);

@@ -105,7 +105,7 @@ var GF = function(){
          let y  = h-200;
          let vx = 0.5;
          let vy = 0;
-         let c = "black";
+
          let pdv = 10;
          let target = new Target(id,x, y, vx, pdv, "right");
          target.extractSprites(assets.spriteSheetRight);
@@ -191,22 +191,14 @@ var GF = function(){
           assets.gunShotSound.play();
           magazine.capacity -= 1;
           targets.forEach((t) => {
-            if(inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
-            && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
-                t.pointDV -= 2;
-                addScore(10);
-            } else if(inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
-            && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h/2){
-                t.pointDV -= 3;
-                addScore(25);
-            } else if (inputStates.mousePos.x > t.x && inputStates.mousePos.x < t.x + t.w / 2
-            && inputStates.mousePos.y > t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
-                t.pointDV -= 4;
-                addScore(50);
-            } else if (inputStates.mousePos.x >= t.x + t.w / 2  && inputStates.mousePos.x < t.x + t.w
-            && inputStates.mousePos.y >= t.y + t.h / 2 && inputStates.mousePos.y < t.y + t.h){
-                t.pointDV -= 5;
+            if(inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
+            && inputStates.mousePos.y > t.y  && inputStates.mousePos.y < t.y+ t.h * 20 / 100 ){
+                t.pointDV = 0;
                 addScore(100);
+            } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
+            && inputStates.mousePos.y > t.y + t.h * 21 / 100  && inputStates.mousePos.y < t.y+ t.h) {
+              t.pointDV -= 4;
+              addScore(10);
             }
             if(t.pointDV<=0){
               let index = targets.findIndex(item => item.id === t.id);
