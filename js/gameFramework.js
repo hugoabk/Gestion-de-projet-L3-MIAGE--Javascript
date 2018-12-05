@@ -23,6 +23,7 @@ var GF = function(){
     // vars for handling targets
     var id = 0;
     var targets = [];
+    var targetsKilled = 0;
 
     // var for handling cover
     var takeCover;
@@ -38,6 +39,10 @@ var GF = function(){
 
     //var for assets
     var assets;
+
+    // vars for levels
+    var Levels = [];
+    var currentLevel = 0;
 
     // vars for backgrounds
     var forest;
@@ -99,22 +104,47 @@ var GF = function(){
     // TARGETS
     // create targets
      function createTargets(n) {
+      var timeO = 3000;
+      // Create the first target
+      createTarget();
+      // Create the others every 3s.
+      for(let i = 0;i<n-1;i++){
+          setTimeout(createTarget,timeO);
+          timeO += 3000;
+      }
+    }
 
-       for(let i = 0; i < n; i++) {
-         let x = Math.random() * w;
-         let y  = h-200;
-         let vx = 0.5;
-         let vy = 0;
+    function createTarget(){
+      // generate random in order to choose a side (left or right)
+      let v = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
+      if (v === 1) {
 
-         let pdv = 10;
-         let target = new Target(id,x, y, vx, pdv, "right");
-         target.extractSprites(assets.spriteSheetRight);
+        let x = 0;
+        let y = h - 200;
+        let vx = Levels[currentLevel].speed;
+        let vy = 0;
 
-         targets.push(target);
+        let pdv = Levels[currentLevel].healthpoint;
+        let target = new Target(id, x, y, vx, pdv, "right");
+        target.extractSprites(assets.spriteSheetRight);
+        targets.push(target);
 
-         id++;
-       }
-     }
+      }
+      else {
+        let x = w - 45;
+        let y = h - 200;
+        let vx = -Levels[currentLevel].speed;
+        let vy = 0;
+
+        let pdv = Levels[currentLevel].healthpoint;
+        let target = new Target(id, x, y, vx, pdv, "left");
+        target.extractSprites(assets.spriteSheetLeft);
+        targets.push(target);
+
+      }
+
+      id++;
+    }
 
     // draw targets
     function drawTarget() {
@@ -205,6 +235,7 @@ var GF = function(){
               targets[index].sprite = new Sprite("explosion");
               targets[index].extractSprites(assets.spriteSheetLeft);
               setTimeout(()=>{targets = targets.filter((target) => target.id !== t.id);},100);
+              targetsKilled += 1;
             }
         })
       }
@@ -251,14 +282,23 @@ var GF = function(){
         backgroundsAreMoving = false;
       }
     }
+    function createLevels(){
+      for(let i = 0; i<3;i++){
+        let id = 1 + i;
+        let nOt = 2*(i+1);
+        let speed = 0.5 + i;
+        let hp = 10;
 
-    // switch level
-    function nextLevel(level){
-      backgroundsAreMoving = true;
-      if(level === 2){
-      createTargets(3);
-      idBackground = setInterval(moveBackgrounds,1000/60);
+        let level = new Level(id,nOt,speed,hp);
+        Levels.push(level);
       }
+    }
+    // switch level
+    function nextLevel(){
+      backgroundsAreMoving = true;
+      currentLevel += 1;
+      createTargets(Levels[currentLevel].numberOfTargets);
+      idBackground = setInterval(moveBackgrounds,1000/60);
     }
     // MAIN LOOP
 
@@ -315,8 +355,8 @@ var GF = function(){
       takeCoverUpdate();
       checkForReload();
       haveToShoot();
-      if(targets.length == 0 && backgroundsAreMoving == false){
-        nextLevel(2);
+      if(targetsKilled == Levels[currentLevel].numberOfTargets && backgroundsAreMoving == false){
+        nextLevel();
       }
     }
 
@@ -332,7 +372,8 @@ var GF = function(){
         assets = assetsLoaded;
         forest = new Background(0,0,assets.firstBackground);
         city = new Background(-w,0, assets.secondBackground);
-        createTargets(3);
+        createLevels();
+        createTargets(Levels[currentLevel].numberOfTargets);
     }
 
 
