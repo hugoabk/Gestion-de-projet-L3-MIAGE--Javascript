@@ -18,4 +18,4 @@ Les modules qui devront être développés :
 Les commandes sont les suivantes :
 - Clic gauche de la souris -> Tirer
 - Touche R -> Recharger
-- Touche Ctrl -> Se mettre à couvert
+- Touche Shift -> Se mettre à couvert
