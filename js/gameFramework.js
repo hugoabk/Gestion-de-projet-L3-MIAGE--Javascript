@@ -16,6 +16,7 @@ var GF = function(){
     var fps;
     var score;
     var val_score;
+    var healthpoint = 100;
 
     // vars for handling inputs
     var inputStates = {};
@@ -45,8 +46,8 @@ var GF = function(){
     var currentLevel = 0;
 
     // vars for backgrounds
-    var forest;
-    var city;
+    var backgrounds = [];
+    var currentBackground = 0;
     var idBackground;
     var backgroundsAreMoving = false;
 
@@ -76,8 +77,10 @@ var GF = function(){
       if(fps !== undefined)
       {
       ctx.save();
+
       ctx.font = "10px sans-serif";
       ctx.fillText("FPS : " + fps,w-40,10);
+
       ctx.restore();
       }
     }
@@ -88,6 +91,15 @@ var GF = function(){
       val_score = new_val.toString();
     }
 
+    // display healthpoint
+    function displayHealthPoints(){
+      ctx.save();
+
+      ctx.font = "20px sans-serif";
+      ctx.fillText("HP : " + healthpoint,w-80,40);
+
+      ctx.restore();
+    }
     // display Score
     function displayScore(){
       if(val_score !== undefined) {
@@ -120,7 +132,7 @@ var GF = function(){
       if (v === 1) {
 
         let x = 0;
-        let y = h - 200;
+        let y = h - 300;
         let vx = Levels[currentLevel].speed;
         let vy = 0;
 
@@ -132,7 +144,7 @@ var GF = function(){
       }
       else {
         let x = w - 45;
-        let y = h - 200;
+        let y = h - 300;
         let vx = -Levels[currentLevel].speed;
         let vy = 0;
 
@@ -183,6 +195,37 @@ var GF = function(){
       });
     }
 
+    function isHittingYou(){
+      targets.forEach((t) => {
+        if (t.isShooting == true && t.willShoot == 0) {
+          let v = parseInt(Math.random() * 500);
+          if(v == 1){
+            t.isHittingYou = true;
+            t.willShoot = setInterval(function(){
+              if(!takeCover.isSafe()){
+              healthpoint -= 10;
+              }
+            },3000);
+          } 
+        }
+      });
+    }
+
+    function displayWarning(){
+      targets.forEach((t) => {
+        if (t.isHittingYou == true) {
+          ctx.save();
+
+          ctx.strokeStyle = 'red';
+          ctx.lineWidth = 10;
+          ctx.strokeRect(0,0,w,h);
+
+          ctx.restore();
+          return;
+        }
+     });
+    }
+
     function checkForReload(){
       if(inputStates.r === true){
         if(magazine.capacity<magazine.capacityMax){
@@ -231,11 +274,15 @@ var GF = function(){
               addScore(10);
             }
             if(t.pointDV<=0){
+              if(t.willShoot != 0){
+                clearInterval(t.willShoot);
+              }
               let index = targets.findIndex(item => item.id === t.id);
               targets[index].sprite = new Sprite("explosion");
               targets[index].extractSprites(assets.spriteSheetLeft);
               setTimeout(()=>{targets = targets.filter((target) => target.id !== t.id);},100);
               targetsKilled += 1;
+
             }
         })
       }
@@ -257,33 +304,36 @@ var GF = function(){
 
     // update the cover state
     function takeCoverUpdate(){
-      if(inputStates.ctrl === true){
+      if(inputStates.shift === true){
         takeCover.moveToTheTop(h);
       }
-      else if(inputStates.ctrl === false) {
+      else if(inputStates.shift === false) {
         takeCover.moveToTheBottom(h);
       }
     }
 
     // draw background
-    function drawBackground(){
-      forest.draw(ctx,w,h);
-      city.draw(ctx,w,h);
+    function drawBackgrounds(){
+      backgrounds.forEach((b)=>{
+        b.draw(ctx,w,h);
+      })
     }
 
     function moveBackgrounds(){
-      if(city.x <= 0){
-        forest.move();
-        city.move();
+      if(backgrounds[currentBackground+1].x <= 0){
+        backgrounds.forEach((b) => {
+          b.move();
+        })
       }
       else
       {
         clearInterval(idBackground);
         backgroundsAreMoving = false;
+        currentBackground += 1;
       }
     }
     function createLevels(){
-      for(let i = 0; i<3;i++){
+      for(let i = 0; i<4;i++){
         let id = 1 + i;
         let nOt = 2*(i+1);
         let speed = 0.5 + i;
@@ -297,6 +347,7 @@ var GF = function(){
     function nextLevel(){
       backgroundsAreMoving = true;
       currentLevel += 1;
+      targetsKilled = 0;
       createTargets(Levels[currentLevel].numberOfTargets);
       idBackground = setInterval(moveBackgrounds,1000/60);
     }
@@ -310,11 +361,14 @@ var GF = function(){
         // clear the canvas
         clearCanvas();
         // draw background
-        drawBackground();
+        drawBackgrounds();
 
         if(backgroundsAreMoving === false){
           // display the fps on the top-left corner
           displayFPS();
+
+          // display the player's healthpoints
+          displayHealthPoints();
 
           // display the score on the top-left corner
           displayScore();
@@ -330,6 +384,9 @@ var GF = function(){
 
           // draw the weapon sight
           drawSight();
+
+          // display warning
+          displayWarning();
         }
         else
         {
@@ -355,6 +412,7 @@ var GF = function(){
       takeCoverUpdate();
       checkForReload();
       haveToShoot();
+      isHittingYou();
       if(targetsKilled == Levels[currentLevel].numberOfTargets && backgroundsAreMoving == false){
         nextLevel();
       }
@@ -370,10 +428,16 @@ var GF = function(){
 
     function allAssetsLoaded(assetsLoaded){
         assets = assetsLoaded;
-        forest = new Background(0,0,assets.firstBackground);
-        city = new Background(-w,0, assets.secondBackground);
+        backgrounds[0] = new Background(0, 0, assets.background_1);
+        backgrounds[1] = new Background(-w,0,assets.background_2);
+        backgrounds[2] = new Background((-w) * 2, 0, assets.background_3);
+        backgrounds[3] = new Background((-w) * 3, 0, assets.background_4);
+
         createLevels();
         createTargets(Levels[currentLevel].numberOfTargets);
+        takeCover = new TakeCover(w, h, assets.coverTexture);
+        magazine = new Magazine(10);
+        val_score = "0";
     }
 
 
@@ -384,7 +448,7 @@ var GF = function(){
       let y = inputStates.mousePos.y;
 
       ctx.save();
-      ctx.strokeStyle = "red";
+      ctx.strokeStyle = "rgb(24, 255, 0)";
       ctx.beginPath();
       ctx.moveTo(x-20,y);
       ctx.lineTo(x-5,y);
@@ -436,8 +500,8 @@ var GF = function(){
       // Add the listeners for the reloading key and the take cover key
 
       window.addEventListener('keydown', function(event){
-          if (event.keyCode === 17) {
-             inputStates.ctrl = true;
+          if (event.keyCode === 16) {
+             inputStates.shift = true;
           } else if (event.keyCode === 82) {
              inputStates.r = true;
           }},
@@ -445,8 +509,8 @@ var GF = function(){
 
 
       window.addEventListener('keyup', function(event){
-          if (event.keyCode === 17) {
-             inputStates.ctrl = false;
+          if (event.keyCode === 16) {
+             inputStates.shift = false;
           } else if (event.keyCode === 82) {
              inputStates.r = false;
           }},
@@ -468,9 +532,6 @@ var GF = function(){
 
       }, false);
 
-      takeCover = new TakeCover(w,h);
-      magazine = new Magazine(10);
-      val_score = "0";
 
       loadAssets((assetsLoaded) => {
         allAssetsLoaded(assetsLoaded);
