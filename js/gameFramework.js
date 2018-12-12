@@ -1,7 +1,18 @@
 // Inits
 window.onload = function init() {
   var game = new GF();
-  game.start();
+  
+  var play = document.getElementById("jouer");
+  play.onclick = function() {
+    document.getElementById("myCanvasMenu").style.display = "none";
+    document.getElementById("viseur").style.display = "none";
+    document.getElementById("jouer").style.display = "none";
+    document.getElementById("score").style.display = "none";
+    document.getElementById("parametre").style.display = "none";
+    document.getElementById("myCanvas").style.display = "block";
+    game.start();
+  };
+
 };
 
 
@@ -206,7 +217,7 @@ var GF = function(){
               healthpoint -= 10;
               }
             },3000);
-          } 
+          }
         }
       });
     }
