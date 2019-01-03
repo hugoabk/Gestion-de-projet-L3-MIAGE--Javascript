@@ -4,6 +4,8 @@
   background-size: cover;
 }
 
+
+
 #viseur {
   position: absolute;
   top : 2em;
@@ -32,10 +34,62 @@
   /*display: none;*/
 }
 
-
 #jouer:hover, #score:hover, #parametre:hover  {
   opacity : 0.5;
 }
+
+#back {
+  position:absolute;
+  top:2em;
+  left:1em;
+
+}
+#sound {
+  position: absolute;
+  top : 15em;
+  left : 5em;
+}
+
+#aim {
+  position: absolute;
+  top : 24em;
+  left : 5em;
+}
+
+#speaker {
+  position: absolute;
+  top : 17em;
+  left : 38em;
+}
+
+#mute {
+  position: absolute;
+  top : 17em;
+  left : 38em;
+}
+
+#yellowSight, #yellowSquare{
+  position: absolute;
+  top : 26em;
+  left : 30em;
+}
+
+#redSight, #redSquare{
+  position: absolute;
+  top : 26em;
+  left : 38em;
+}
+
+#greenSight, #greenSquare{
+  position: absolute;
+  top : 26em;
+  left : 46em;
+}
+
+#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare {
+  display: none;
+}
+
 
 #myCanvas {
   border:1px solid;

@@ -1,33 +1,32 @@
 // Inits
 window.onload = function init() {
   var game = new GF();
-  
-  var play = document.getElementById("jouer");
-  play.onclick = function() {
-    document.getElementById("myCanvasMenu").style.display = "none";
-    document.getElementById("viseur").style.display = "none";
-    document.getElementById("jouer").style.display = "none";
-    document.getElementById("score").style.display = "none";
-    document.getElementById("parametre").style.display = "none";
-    document.getElementById("myCanvas").style.display = "block";
-    game.start();
-  };
+  var sound = true;
+  game.displayMenu();
+
 
 };
+
+
 
 
 // GAME FRAMEWORK STARTS HERE
 var GF = function(){
     // Vars relative to the canvas
     var canvas, ctx, w, h;
-
     // vars for counting frames/s, used by the measureFPS function
     var frameCount = 0;
     var lastTime;
     var fps;
+
+    // vars for handling score and healthpoints
     var score;
     var val_score;
     var healthpoint = 100;
+
+    // vars for handling parameters
+    var isSoundOn = true;
+    var sightColor = "green";
 
     // vars for handling inputs
     var inputStates = {};
@@ -61,6 +60,9 @@ var GF = function(){
     var currentBackground = 0;
     var idBackground;
     var backgroundsAreMoving = false;
+    
+    // var pause/resume game
+    var isRunning = true;
 
 
     var measureFPS = function(newTime){
@@ -95,6 +97,132 @@ var GF = function(){
       ctx.restore();
       }
     }
+  
+    function displayMenu() {
+      document.getElementById("myCanvasMenu").style.display = "block";
+      document.getElementById("viseur").style.display = "block";
+      document.getElementById("jouer").style.display = "block";
+      document.getElementById("score").style.display = "block";
+      document.getElementById("parametre").style.display = "block";
+
+      var play = document.getElementById("jouer");
+      play.onclick = function () {
+        hideMenu();
+        if(!isRunning){
+          togglePause();
+        }
+        else
+        {
+        start();
+        }
+      };
+
+      var parameter = document.getElementById("parametre");
+      parameter.onclick = function () {
+        document.getElementById("jouer").style.display = "none";
+        document.getElementById("score").style.display = "none";
+        document.getElementById("parametre").style.display = "none";
+        if(isSoundOn){
+          document.getElementById("speaker").style.display = "block";
+        } 
+        else
+        {
+          document.getElementById("mute").style.display = "block";
+        }
+        document.getElementById("sound").style.display = "block";
+        document.getElementById("aim").style.display = "block";
+        document.getElementById("back").style.display = "block";
+        document.getElementById("yellowSight").style.display = "block";
+        document.getElementById("redSight").style.display = "block";
+        document.getElementById("greenSight").style.display = "block";
+        switch(sightColor){
+          case "green":
+            document.getElementById("greenSquare").style.display = "block";
+            break;
+          case "red":
+            document.getElementById("redSquare").style.display = "block";
+            break;
+          case "yellow":
+            document.getElementById("yellowSquare").style.display = "block";
+            break;
+        }
+      };
+
+      var redSight = document.getElementById("redSight");
+      redSight.onclick = function () {
+        document.getElementById("greenSquare").style.display = "none";
+        document.getElementById("yellowSquare").style.display = "none";
+        document.getElementById("redSquare").style.display = "block";
+        sightColor = "red";
+      };
+
+      var yellowSight = document.getElementById("yellowSight");
+      yellowSight.onclick = function () {
+        document.getElementById("greenSquare").style.display = "none";
+        document.getElementById("redSquare").style.display = "none";
+        document.getElementById("yellowSquare").style.display = "block";
+        sightColor = "yellow";
+      };
+
+      var greenSight = document.getElementById("greenSight");
+      greenSight.onclick = function () {
+        document.getElementById("yellowSquare").style.display = "none";
+        document.getElementById("redSquare").style.display = "none";
+        document.getElementById("greenSquare").style.display = "block";
+        sightColor = "green";
+      };
+
+      var speaker = document.getElementById("speaker");
+      speaker.onclick = function () {
+        document.getElementById("speaker").style.display = "none";
+        document.getElementById("mute").style.display = "block";
+        isSoundOn = false;
+      };
+
+      var mute = document.getElementById("mute");
+      mute.onclick = function () {
+        isSoundOn = true;
+        document.getElementById("mute").style.display = "none";
+        document.getElementById("speaker").style.display = "block";
+      };
+
+
+      var back = document.getElementById("back");
+      back.onclick = function () {
+        document.getElementById("jouer").style.display = "block";
+        document.getElementById("score").style.display = "block";
+        document.getElementById("parametre").style.display = "block";
+        document.getElementById("sound").style.display = "none";
+        document.getElementById("speaker").style.display = "none";
+        document.getElementById("mute").style.display = "none";
+        document.getElementById("aim").style.display = "none";
+        document.getElementById("back").style.display = "none";
+        document.getElementById("yellowSquare").style.display = "none";
+        document.getElementById("redSquare").style.display = "none";
+        document.getElementById("greenSquare").style.display = "none";
+        document.getElementById("yellowSight").style.display = "none";
+        document.getElementById("redSight").style.display = "none";
+        document.getElementById("greenSight").style.display = "none";
+      };
+
+    }
+
+    function hideMenu(){
+      document.getElementById("myCanvasMenu").style.display = "none";
+      document.getElementById("viseur").style.display = "none";
+      document.getElementById("jouer").style.display = "none";
+      document.getElementById("score").style.display = "none";
+      document.getElementById("parametre").style.display = "none";
+      document.getElementById("myCanvas").style.display = "block";
+    }
+
+    function togglePause(){
+      isRunning = !isRunning;
+
+      if(isRunning){
+        requestAnimationFrame(mainLoop);
+      }
+    }
 
     function addScore(inc) {
       var new_val = Number(val_score);
@@ -120,13 +248,13 @@ var GF = function(){
     }
 
      // clears the canvas content
-     function clearCanvas() {
+    function clearCanvas() {
        ctx.clearRect(0, 0, w, h);
-     }
+    }
 
     // TARGETS
     // create targets
-     function createTargets(n) {
+    function createTargets(n) {
       var timeO = 3000;
       // Create the first target
       createTarget();
@@ -250,7 +378,9 @@ var GF = function(){
 
       if(magazine.capacity<magazine.capacityMax && reloading === true){
         if(isReloading === false){
-          assets.reloadSound.play();
+          if(isSoundOn){
+            assets.reloadSound.play();
+          }
           idReload = setInterval(reload,500);
           isReloading = true;
         }
@@ -260,7 +390,9 @@ var GF = function(){
         clearInterval(idReload);
         isReloading = false;
         reloading = false;
-        assets.reloadSound.stop();
+        if(isSoundOn){
+          assets.reloadSound.stop();
+        }
       }
     }
 
@@ -272,7 +404,9 @@ var GF = function(){
       if(inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick === 1){
         boolClick = 0;
         if(magazine.capacity > 0 && reloading !== true){
-          assets.gunShotSound.play();
+          if(isSoundOn){
+            assets.gunShotSound.play();
+          }
           magazine.capacity -= 1;
           targets.forEach((t) => {
             if(inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
@@ -368,7 +502,6 @@ var GF = function(){
 
         // measure the frames per second
         measureFPS(time);
-
         // clear the canvas
         clearCanvas();
         // draw background
@@ -414,7 +547,9 @@ var GF = function(){
         updateGameState();
 
         // call the animation loop every 1/60th of second
+        if(isRunning){
         requestAnimationFrame(mainLoop);
+        }
     };
 
     // Update the game components
@@ -459,7 +594,7 @@ var GF = function(){
       let y = inputStates.mousePos.y;
 
       ctx.save();
-      ctx.strokeStyle = "rgb(24, 255, 0)";
+      ctx.strokeStyle = sightColor;
       ctx.beginPath();
       ctx.moveTo(x-20,y);
       ctx.lineTo(x-5,y);
@@ -511,11 +646,27 @@ var GF = function(){
       // Add the listeners for the reloading key and the take cover key
 
       window.addEventListener('keydown', function(event){
-          if (event.keyCode === 16) {
-             inputStates.shift = true;
-          } else if (event.keyCode === 82) {
-             inputStates.r = true;
-          }},
+          switch(event.keyCode){
+            case 16:
+              inputStates.shift = true;
+              break;
+            case 82:
+              inputStates.r = true;
+              break;
+            case 27:
+              if(isRunning){
+                togglePause();
+                displayMenu();
+              }
+              else
+              {
+                togglePause();
+                hideMenu();
+              }
+              break;
+            default:
+          }
+        },
           false);
 
 
@@ -552,6 +703,7 @@ var GF = function(){
 
 
     return {
-        start: start
+        start: start,
+        displayMenu : displayMenu
     };
 };
