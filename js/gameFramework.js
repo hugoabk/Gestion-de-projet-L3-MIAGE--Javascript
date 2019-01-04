@@ -213,6 +213,17 @@ var GF = function(){
       document.getElementById("jouer").style.display = "none";
       document.getElementById("score").style.display = "none";
       document.getElementById("parametre").style.display = "none";
+      document.getElementById("sound").style.display = "none";
+      document.getElementById("speaker").style.display = "none";
+      document.getElementById("mute").style.display = "none";
+      document.getElementById("aim").style.display = "none";
+      document.getElementById("back").style.display = "none";
+      document.getElementById("yellowSquare").style.display = "none";
+      document.getElementById("redSquare").style.display = "none";
+      document.getElementById("greenSquare").style.display = "none";
+      document.getElementById("yellowSight").style.display = "none";
+      document.getElementById("redSight").style.display = "none";
+      document.getElementById("greenSight").style.display = "none";
       document.getElementById("myCanvas").style.display = "block";
     }
 
