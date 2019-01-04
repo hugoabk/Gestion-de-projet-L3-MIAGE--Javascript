@@ -322,6 +322,7 @@ var GF = function(){
         t.x  = w - t.w;
         t.sprite = new Sprite("left");
         t.extractSprites(assets.spriteSheetLeft);
+        t.action = "left";
        }
 
         if(t.x < 0) {
@@ -329,6 +330,7 @@ var GF = function(){
         t.x = 0
         t.sprite = new Sprite("right");
         t.extractSprites(assets.spriteSheetRight);
+        t.action = "right";
         }
       });
     }
@@ -341,6 +343,7 @@ var GF = function(){
           t.vx = 0;
           t.sprite = new Sprite("tir");
           t.extractSprites(assets.spriteSheetLeft);
+          t.action = "tir";
         }
       });
     }
@@ -410,41 +413,88 @@ var GF = function(){
     function reload(){
         magazine.capacity += 1;
      }
-    // update the targets and magazine state
-    function targetsAndMagazineUpdate(){
-      if(inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick === 1){
-        boolClick = 0;
-        if(magazine.capacity > 0 && reloading !== true){
-          if(isSoundOn){
-            assets.gunShotSound.play();
-          }
-          magazine.capacity -= 1;
-          targets.forEach((t) => {
-            if(inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
-            && inputStates.mousePos.y > t.y  && inputStates.mousePos.y < t.y+ t.h * 20 / 100 ){
-                t.pointDV = 0;
-                addScore(100);
-            } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
-            && inputStates.mousePos.y > t.y + t.h * 21 / 100  && inputStates.mousePos.y < t.y+ t.h) {
-              t.pointDV -= 4;
-              addScore(10);
-            }
-            if(t.pointDV<=0){
-              if(t.willShoot != 0){
-                clearInterval(t.willShoot);
-              }
-              let index = targets.findIndex(item => item.id === t.id);
-              targets[index].sprite = new Sprite("explosion");
-              targets[index].extractSprites(assets.spriteSheetLeft);
-              setTimeout(()=>{targets = targets.filter((target) => target.id !== t.id);},100);
-              targetsKilled += 1;
+  // update the targets and magazine state
+  function targetsAndMagazineUpdate() {
+    if (inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick === 1) {
+      boolClick = 0;
+      if (magazine.capacity > 0 && reloading !== true) {
+        if(isSoundOn){
+          assets.gunShotSound.play();
+        }
+        magazine.capacity -= 1;
+        targets.forEach((t) => {
+          switch (t.action) {
+            case "tir":
+              if (inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
+                && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
 
-            }
+                if (t.pointDV == 10) {
+                  addScore(100);
+                }
+                else {
+                  addScore(20);
+                }
+                t.pointDV = 0;
+
+              } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
+                && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
+                t.pointDV -= 4;
+                addScore(20);
+              }
+              break;
+
+            case "right":
+              if (inputStates.mousePos.x > t.x + t.w * 45 / 100 && inputStates.mousePos.x < t.x + t.w * 78 / 100
+                && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
+
+                if (t.pointDV == 10) {
+                  addScore(100);
+                }
+                else {
+                  addScore(20);
+                }
+                t.pointDV = 0;
+
+              } else if (inputStates.mousePos.x > t.x + t.w * 38 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
+                && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h * 40 / 100) {
+                t.pointDV -= 4;
+                addScore(20);
+              }
+              break;
+
+            case "left":
+              if (inputStates.mousePos.x > t.x + t.w * 25 / 100 && inputStates.mousePos.x < t.x + t.w * 46 / 100
+                && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
+
+                if (t.pointDV == 10) {
+                  addScore(100);
+                }
+                else {
+                  addScore(20);
+                }
+                t.pointDV = 0;
+
+              } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
+                && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
+                t.pointDV -= 4;
+                addScore(20);
+              }
+              break;
+
+          }
+
+          if (t.pointDV <= 0) {
+            let index = targets.findIndex(item => item.id === t.id);
+            targets[index].sprite = new Sprite("explosion");
+            targets[index].extractSprites(assets.spriteSheetLeft);
+            setTimeout(() => { targets = targets.filter((target) => target.id !== t.id); }, 100);
+          }
         })
       }
-      else
-      {
-        assets.emptyGunSound.play();
+      else {
+        if(isSoundOn){
+          assets.emptyGunSound.play();
+        }
       }
     }
     targets.forEach((t) => {

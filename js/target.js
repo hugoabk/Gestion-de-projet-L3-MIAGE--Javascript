@@ -3,6 +3,7 @@ class Target {
 
     constructor(id, x, y,vx,pointDV,action) {
         this.sprite = new Sprite(action);
+        this.action = action;
         this.id = id;
         this.x = x;
         this.y = y;
