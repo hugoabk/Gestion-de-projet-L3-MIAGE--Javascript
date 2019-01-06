@@ -68,7 +68,7 @@ var GF = function(){
     var crates = [];
     const floor = 250;
     var bulletHoles = [];
-
+    var requestID;
 
     var measureFPS = function(newTime){
 
@@ -232,6 +232,11 @@ var GF = function(){
       document.getElementById("myCanvas").style.display = "block";
     }
 
+    function displayLosingScreen(){
+      document.getElementById("myCanvasMenu").style.display = "block";
+      document.getElementById("gameOver").style.display = "block";
+    }
+
     function togglePause(){
       isRunning = !isRunning;
 
@@ -385,15 +390,32 @@ var GF = function(){
       });
     }
 
+    function clearShootings(){
+      targets.forEach((t)=>{
+        if(t.willShoot !== 0){
+          clearInterval(t.willShoot);
+        }
+      })
+    }
+
     function isHittingYou(){
       targets.forEach((t) => {
-        if (t.isShooting == true && t.willShoot == 0) {
+        if (t.isShooting === true && t.willShoot === 0) {
           let v = parseInt(Math.random() * 500);
           if(v == 1){
             t.isHittingYou = true;
             t.willShoot = setInterval(function(){
               if(!takeCover.isSafe()){
-              healthpoint -= 10;
+                healthpoint -= 10;
+                if(healthpoint <= 0){
+                  cancelAnimationFrame(requestID);
+                  clearShootings();
+                  displayLosingScreen();
+                  setTimeout(()=>{
+                    document.getElementById("gameOver").style.display = "none";
+                    displayMenu();
+                  },2000)
+                }
               }
             },3000);
           }
@@ -661,7 +683,7 @@ var GF = function(){
 
         // call the animation loop every 1/60th of second
         if(isRunning){
-        requestAnimationFrame(mainLoop);
+        requestID = requestAnimationFrame(mainLoop);
         }
     };
 
@@ -686,21 +708,26 @@ var GF = function(){
       magazine.draw(ctx);
     }
 
-    // ASSETS
 
+    function initialize(){
+      healthpoint = 100;
+      Levels.length = 0;
+      bulletHoles.length = 0;
+      targets.length = 0;
+      createLevels();
+      createTargets(Levels[currentLevel].numberOfTargets);
+      createCrates(3);
+      takeCover = new TakeCover(w, h, assets.coverTexture);
+      magazine = new Magazine(10, assets.bullet);
+      val_score = "0";
+    }
+    // ASSETS
     function allAssetsLoaded(assetsLoaded){
         assets = assetsLoaded;
         backgrounds[0] = new Background(0, 0, assets.background_1);
         backgrounds[1] = new Background(-w,0,assets.background_2);
         backgrounds[2] = new Background((-w) * 2, 0, assets.background_3);
         backgrounds[3] = new Background((-w) * 3, 0, assets.background_4);
-
-        createLevels();
-        createTargets(Levels[currentLevel].numberOfTargets);
-        createCrates(3);
-        takeCover = new TakeCover(w, h, assets.coverTexture);
-        magazine = new Magazine(10,assets.bullet);
-        val_score = "0";
     }
 
 
@@ -821,7 +848,8 @@ var GF = function(){
 
       loadAssets((assetsLoaded) => {
         allAssetsLoaded(assetsLoaded);
-        requestAnimationFrame(mainLoop);
+        initialize();
+        requestID = requestAnimationFrame(mainLoop);
       })
     };
 

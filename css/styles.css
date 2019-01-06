@@ -50,6 +50,12 @@
   left : 5em;
 }
 
+#gameOver {
+  position: absolute;
+  top : 5em;
+  left : 8em;
+}
+
 #aim {
   position: absolute;
   top : 24em;
@@ -86,7 +92,7 @@
   left : 46em;
 }
 
-#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare {
+#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #gameOver {
   display: none;
 }
 
