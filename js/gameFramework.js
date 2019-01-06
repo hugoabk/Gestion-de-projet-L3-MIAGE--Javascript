@@ -2,7 +2,6 @@
 window.onload = function init() {
   var game = new GF();
   var sound = true;
-  window.localStorage.setItem("score", "?");
   document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
   game.displayMenu();
 };
@@ -422,8 +421,12 @@ var GF = function(){
                   clearShootings();
                   displayLosingScreen();
                   setTimeout(()=>{
-                    window.localStorage.setItem("score", val_score);
-                    document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
+                    var sc = window.localStorage.getItem('score')
+                    parseInt(sc);
+                    if(parseInt(val_score) > parseInt(sc)) {
+                      window.localStorage.setItem("score", val_score);
+                      document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
+                    }
                     document.getElementById("gameOver").style.display = "none";
                     displayMenu();
                   },2000)
