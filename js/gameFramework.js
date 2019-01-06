@@ -556,6 +556,7 @@ var GF = function(){
               targets[index].sprite = new Sprite("explosion");
               targets[index].extractSprites(assets.spriteSheetLeft);
               setTimeout(() => { targets = targets.filter((target) => target.id !== t.id); }, 100);
+              clearInterval(t.willShoot);
               targetsKilled += 1;
             }
           })
