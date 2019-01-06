@@ -463,7 +463,7 @@ var GF = function(){
         crates.forEach((c)=>{
           if (inputStates.mousePos.x >= c.x && inputStates.mousePos.x <= c.x + 128
             && inputStates.mousePos.y >= c.y && inputStates.mousePos.y <= c.y + 128) {
-            bulletHoles.push({ 'x': inputStates.mousePos.x, 'y': inputStates.mousePos.y });
+            bulletHoles.push({ 'x': inputStates.mousePos.x - 10, 'y': inputStates.mousePos.y - 10 });
             isCrateHit = true;
           }
         })
