@@ -64,6 +64,11 @@ var GF = function(){
     // var pause/resume game
     var isRunning = true;
 
+    // var crates
+    var crates = [];
+    const floor = 250;
+    var bulletHoles = [];
+
 
     var measureFPS = function(newTime){
 
@@ -92,7 +97,7 @@ var GF = function(){
       ctx.save();
 
       ctx.font = "10px sans-serif";
-      ctx.fillText("FPS : " + fps,w-40,10);
+      ctx.fillText("FPS : " + fps,w-50,15);
 
       ctx.restore();
       }
@@ -246,14 +251,14 @@ var GF = function(){
       ctx.save();
 
       ctx.font = "20px sans-serif";
-      ctx.fillText("HP : " + healthpoint,w-80,40);
+      ctx.fillText("HP : " + healthpoint,w-87,40);
 
       ctx.restore();
     }
     // display Score
     function displayScore(){
       if(val_score !== undefined) {
-        score = new Score("Score : " + val_score,5,80);
+        score = new Score("Score : " + val_score,5,90);
         score.draw(ctx);
       }
     }
@@ -261,6 +266,38 @@ var GF = function(){
      // clears the canvas content
     function clearCanvas() {
        ctx.clearRect(0, 0, w, h);
+    }
+
+    // CRATES
+    // create crates
+    function createCrates(n){
+      for (let i = 0; i < n; i++) {
+        let x = 40 + (i*300);
+        let y = h - floor;
+        let image = assets.crate;
+
+        let crate = new Crate(x, y, image);
+        crates.push(crate);
+      }
+    }
+
+    // draw crates
+    function drawCrates() {
+      crates.forEach((c) => {
+        c.draw(ctx);
+      })
+    }
+
+    //draw bullet hole
+    function drawBulletHoles(){
+      bulletHoles.forEach((b)=>{
+        ctx.save();
+
+        ctx.drawImage(assets.bulletHole,b.x,b.y);
+
+        ctx.restore();
+
+      })
     }
 
     // TARGETS
@@ -309,7 +346,7 @@ var GF = function(){
     }
 
     // draw targets
-    function drawTarget() {
+    function drawTargets() {
       targets.forEach((t) => {
         t.draw(ctx);
       })
@@ -415,6 +452,7 @@ var GF = function(){
      }
   // update the targets and magazine state
   function targetsAndMagazineUpdate() {
+    var isCrateHit = false;
     if (inputStates.mousedown === true && inputStates.mouseButton === 0 && boolClick === 1) {
       boolClick = 0;
       if (magazine.capacity > 0 && reloading !== true) {
@@ -422,74 +460,84 @@ var GF = function(){
           assets.gunShotSound.play();
         }
         magazine.capacity -= 1;
-        targets.forEach((t) => {
-          switch (t.action) {
-            case "tir":
-              if (inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
-                && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
-
-                if (t.pointDV == 10) {
-                  addScore(100);
-                }
-                else {
-                  addScore(20);
-                }
-                t.pointDV = 0;
-
-              } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
-                && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
-                t.pointDV -= 4;
-                addScore(20);
-              }
-              break;
-
-            case "right":
-              if (inputStates.mousePos.x > t.x + t.w * 45 / 100 && inputStates.mousePos.x < t.x + t.w * 78 / 100
-                && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
-
-                if (t.pointDV == 10) {
-                  addScore(100);
-                }
-                else {
-                  addScore(20);
-                }
-                t.pointDV = 0;
-
-              } else if (inputStates.mousePos.x > t.x + t.w * 38 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
-                && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h * 40 / 100) {
-                t.pointDV -= 4;
-                addScore(20);
-              }
-              break;
-
-            case "left":
-              if (inputStates.mousePos.x > t.x + t.w * 25 / 100 && inputStates.mousePos.x < t.x + t.w * 46 / 100
-                && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
-
-                if (t.pointDV == 10) {
-                  addScore(100);
-                }
-                else {
-                  addScore(20);
-                }
-                t.pointDV = 0;
-
-              } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
-                && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
-                t.pointDV -= 4;
-                addScore(20);
-              }
-              break;
-
-          }
-
-          if (t.pointDV <= 0) {
-            let index = targets.findIndex(item => item.id === t.id);
-            targets[index].sprite = new Sprite("explosion");
-            targets[index].extractSprites(assets.spriteSheetLeft);
-            setTimeout(() => { targets = targets.filter((target) => target.id !== t.id); }, 100);
+        crates.forEach((c)=>{
+          if (inputStates.mousePos.x >= c.x && inputStates.mousePos.x <= c.x + 128
+            && inputStates.mousePos.y >= c.y && inputStates.mousePos.y <= c.y + 128) {
+            bulletHoles.push({ 'x': inputStates.mousePos.x, 'y': inputStates.mousePos.y });
+            isCrateHit = true;
           }
         })
+        if(isCrateHit === false){
+          targets.forEach((t) => {
+            switch (t.action) {
+              case "tir":
+                if (inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
+                  && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
+
+                  if (t.pointDV == 10) {
+                    addScore(100);
+                  }
+                  else {
+                    addScore(20);
+                  }
+                  t.pointDV = 0;
+
+                } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
+                  && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
+                  t.pointDV -= 4;
+                  addScore(20);
+                }
+                break;
+
+              case "right":
+                if (inputStates.mousePos.x > t.x + t.w * 45 / 100 && inputStates.mousePos.x < t.x + t.w * 78 / 100
+                  && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
+
+                  if (t.pointDV == 10) {
+                    addScore(100);
+                  }
+                  else {
+                    addScore(20);
+                  }
+                  t.pointDV = 0;
+
+                } else if (inputStates.mousePos.x > t.x + t.w * 38 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
+                  && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h * 40 / 100) {
+                  t.pointDV -= 4;
+                  addScore(20);
+                }
+                break;
+
+              case "left":
+                if (inputStates.mousePos.x > t.x + t.w * 25 / 100 && inputStates.mousePos.x < t.x + t.w * 46 / 100
+                  && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
+
+                  if (t.pointDV == 10) {
+                    addScore(100);
+                  }
+                  else {
+                    addScore(20);
+                  }
+                  t.pointDV = 0;
+
+                } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
+                  && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
+                  t.pointDV -= 4;
+                  addScore(20);
+                }
+                break;
+
+            }
+
+            if (t.pointDV <= 0) {
+              let index = targets.findIndex(item => item.id === t.id);
+              targets[index].sprite = new Sprite("explosion");
+              targets[index].extractSprites(assets.spriteSheetLeft);
+              setTimeout(() => { targets = targets.filter((target) => target.id !== t.id); }, 100);
+              targetsKilled += 1;
+            }
+          })
+        }
       }
       else {
         if(isSoundOn){
@@ -554,7 +602,7 @@ var GF = function(){
       backgroundsAreMoving = true;
       currentLevel += 1;
       targetsKilled = 0;
-      createTargets(Levels[currentLevel].numberOfTargets);
+      bulletHoles.length = 0;
       idBackground = setInterval(moveBackgrounds,1000/60);
     }
     // MAIN LOOP
@@ -582,7 +630,11 @@ var GF = function(){
           drawMagazine();
 
           // draw the targets
-          drawTarget();
+          drawTargets();
+
+          // draw the crates
+          drawCrates();
+          drawBulletHoles();
 
           // take cover
           drawTakeCover();
@@ -620,7 +672,10 @@ var GF = function(){
       checkForReload();
       haveToShoot();
       isHittingYou();
-      if(targetsKilled == Levels[currentLevel].numberOfTargets && backgroundsAreMoving == false){
+      if (targetsKilled === 0 && backgroundsAreMoving === false && targets.length === 0){
+        createTargets(Levels[currentLevel].numberOfTargets);
+      }
+      if(targetsKilled === Levels[currentLevel].numberOfTargets && backgroundsAreMoving === false){
         nextLevel();
       }
     }
@@ -642,8 +697,9 @@ var GF = function(){
 
         createLevels();
         createTargets(Levels[currentLevel].numberOfTargets);
+        createCrates(3);
         takeCover = new TakeCover(w, h, assets.coverTexture);
-        magazine = new Magazine(10);
+        magazine = new Magazine(10,assets.bullet);
         val_score = "0";
     }
 
@@ -716,6 +772,12 @@ var GF = function(){
               break;
             case 27:
               if(isRunning){
+                if(isReloading === true){
+                  clearInterval(idReload);
+                  if (isSoundOn) {
+                    assets.reloadSound.stop();
+                  }
+                }
                 togglePause();
                 displayMenu();
               }
@@ -723,6 +785,7 @@ var GF = function(){
               {
                 togglePause();
                 hideMenu();
+                isReloading = false;
               }
               break;
             default:

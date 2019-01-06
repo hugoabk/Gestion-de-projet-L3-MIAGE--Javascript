@@ -7,6 +7,9 @@ var assetsToLoadURLs = {
     background_3: { url: "assets/images/background_1.png" },
     background_4: { url: "assets/images/background_2.jpg" },
     coverTexture: { url: "assets/images/cover_texture.jpg" },
+    crate: { url: "assets/images/crate.png" },
+    bullet: { url: "assets/images/bullet.png" },
+    bulletHole: { url: "assets/images/bullethole.png" },
     spriteSheetLeft: {url: "assets/images/spriteSheetLeft.png"},
     spriteSheetRight: {url: "assets/images/spriteSheetRight.png"}
 };
