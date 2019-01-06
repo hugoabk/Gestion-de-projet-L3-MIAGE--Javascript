@@ -1,10 +1,19 @@
+@font-face {
+	font-family: "Break";
+	src: url('break_semibold.ttf');
+}
+
+@font-face {
+	font-family: "Break";
+	font-weight: bold;
+	src: url('reak_bold.ttf');
+}
+
 #myCanvasMenu {
   position: absolute;
   background-image: url("../assets/images/menu_background.jpg");
   background-size: cover;
 }
-
-
 
 #viseur {
   position: absolute;
@@ -92,7 +101,16 @@
   left : 46em;
 }
 
-#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #gameOver {
+#score_value {
+  position: absolute;
+  top : 3.25em;
+  left : 3.1em;
+  color: white;
+  font-family: "Break";
+  font-size: 5em;
+}
+
+#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #gameOver, #score_value {
   display: none;
 }
 

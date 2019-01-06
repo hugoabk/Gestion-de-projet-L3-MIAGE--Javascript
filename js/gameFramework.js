@@ -2,9 +2,9 @@
 window.onload = function init() {
   var game = new GF();
   var sound = true;
+  window.localStorage.setItem("score", "?");
+  document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
   game.displayMenu();
-
-
 };
 
 
@@ -122,6 +122,15 @@ var GF = function(){
         }
       };
 
+      var score_menu = document.getElementById("score");
+      score_menu.onclick = function() {
+        document.getElementById("jouer").style.display = "none";
+        document.getElementById("score").style.display = "none";
+        document.getElementById("parametre").style.display = "none";
+        document.getElementById("score_value").style.display = "block";
+        document.getElementById("back").style.display = "block";
+      };
+
       var parameter = document.getElementById("parametre");
       parameter.onclick = function () {
         document.getElementById("jouer").style.display = "none";
@@ -208,6 +217,7 @@ var GF = function(){
         document.getElementById("yellowSight").style.display = "none";
         document.getElementById("redSight").style.display = "none";
         document.getElementById("greenSight").style.display = "none";
+        document.getElementById("score_value").style.display = "none";
       };
 
     }
@@ -412,6 +422,8 @@ var GF = function(){
                   clearShootings();
                   displayLosingScreen();
                   setTimeout(()=>{
+                    window.localStorage.setItem("score", val_score);
+                    document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
                     document.getElementById("gameOver").style.display = "none";
                     displayMenu();
                   },2000)
