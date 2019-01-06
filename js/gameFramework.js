@@ -60,7 +60,7 @@ var GF = function(){
     var currentBackground = 0;
     var idBackground;
     var backgroundsAreMoving = false;
-    
+
     // var pause/resume game
     var isRunning = true;
 
@@ -102,7 +102,7 @@ var GF = function(){
       ctx.restore();
       }
     }
-  
+
     function displayMenu() {
       document.getElementById("myCanvasMenu").style.display = "block";
       document.getElementById("viseur").style.display = "block";
@@ -129,7 +129,7 @@ var GF = function(){
         document.getElementById("parametre").style.display = "none";
         if(isSoundOn){
           document.getElementById("speaker").style.display = "block";
-        } 
+        }
         else
         {
           document.getElementById("mute").style.display = "block";
@@ -523,8 +523,8 @@ var GF = function(){
                   }
                   t.pointDV = 0;
 
-                } else if (inputStates.mousePos.x > t.x + t.w * 38 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
-                  && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h * 40 / 100) {
+                } else if (inputStates.mousePos.x > t.x + t.w * 32 / 100 && inputStates.mousePos.x < t.x + t.w * 78 / 100
+                  && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
                   t.pointDV -= 4;
                   addScore(20);
                 }
@@ -542,7 +542,7 @@ var GF = function(){
                   }
                   t.pointDV = 0;
 
-                } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
+                } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 74 / 100
                   && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
                   t.pointDV -= 4;
                   addScore(20);
