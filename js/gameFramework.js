@@ -2,6 +2,8 @@
 window.onload = function init() {
   var game = new GF();
   var sound = true;
+  if(!window.localStorage.getItem('score'))
+    window.localStorage.setItem("score", "0");
   document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
   game.displayMenu();
 };
@@ -246,6 +248,14 @@ var GF = function(){
       document.getElementById("gameOver").style.display = "block";
     }
 
+    function updateScore(){
+      var sc = window.localStorage.getItem('score');
+      if(sc || parseInt(val_score) > parseInt(sc)) {
+        window.localStorage.setItem("score", val_score);
+        document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
+      }
+    }
+
     function togglePause(){
       isRunning = !isRunning;
 
@@ -420,13 +430,8 @@ var GF = function(){
                   cancelAnimationFrame(requestID);
                   clearShootings();
                   displayLosingScreen();
+                  updateScore();
                   setTimeout(()=>{
-                    var sc = window.localStorage.getItem('score')
-                    parseInt(sc);
-                    if(parseInt(val_score) > parseInt(sc)) {
-                      window.localStorage.setItem("score", val_score);
-                      document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
-                    }
                     document.getElementById("gameOver").style.display = "none";
                     displayMenu();
                   },2000)
