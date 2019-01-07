@@ -556,7 +556,7 @@ var GF = function(){
                 break;
 
               case "left":
-                if (inputStates.mousePos.x > t.x + t.w * 25 / 100 && inputStates.mousePos.x < t.x + t.w * 46 / 100
+                if (inputStates.mousePos.x > t.x + t.w * 25 / 100 && inputStates.mousePos.x < t.x + t.w * 58 / 100
                   && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
 
                   if (t.pointDV == 10) {
