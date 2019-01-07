@@ -9,6 +9,7 @@ window.onload = function init() {
   loadAssets((assetsLoaded) => {
     game.allAssetsLoaded(assetsLoaded);
     game.displayMenu();
+    assets.backgroundMusic.play();
   })
 };
 

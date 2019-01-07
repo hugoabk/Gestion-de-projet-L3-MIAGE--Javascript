@@ -2,6 +2,7 @@ var assetsToLoadURLs = {
     gunShotSound: { url: "assets/audio/gunShotSound.mp3", buffer: false, loop: false, volume: 1.0 },
     emptyGunSound: { url: "assets/audio/emptyGunSound.wav", buffer: false, loop: false, volume: 1.0 },
     reloadSound: { url: "assets/audio/reloadSound.wav", buffer : false, loop: true, volume :1.0},
+    backgroundMusic: { url: "assets/audio/Way-Up.mp3", buffer : false, loop: true, volume :1.0},
     background_1: { url: "assets/images/background_1.png"},
     background_2: { url: "assets/images/background_2.jpg"},
     background_3: { url: "assets/images/background_1.png" },
