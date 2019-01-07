@@ -1,3 +1,4 @@
+var assets;
 // Inits
 window.onload = function init() {
   var game = new GF();
@@ -5,7 +6,10 @@ window.onload = function init() {
   if(!window.localStorage.getItem('score'))
     window.localStorage.setItem("score", "0");
   document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
-  game.displayMenu();
+  loadAssets((assetsLoaded) => {
+    game.allAssetsLoaded(assetsLoaded);
+    game.displayMenu();
+  })
 };
 
 
@@ -50,7 +54,7 @@ var GF = function(){
     var idReload;
 
     //var for assets
-    var assets;
+    //var assets;
 
     // vars for levels
     var Levels = [];
@@ -731,6 +735,10 @@ var GF = function(){
 
 
     function initialize(){
+      backgrounds[0] = new Background(0, 0, assets.background_1);
+      backgrounds[1] = new Background(-w,0,assets.background_2);
+      backgrounds[2] = new Background((-w) * 2, 0, assets.background_3);
+      backgrounds[3] = new Background((-w) * 3, 0, assets.background_4);
       healthpoint = 100;
       Levels.length = 0;
       bulletHoles.length = 0;
@@ -745,10 +753,6 @@ var GF = function(){
     // ASSETS
     function allAssetsLoaded(assetsLoaded){
         assets = assetsLoaded;
-        backgrounds[0] = new Background(0, 0, assets.background_1);
-        backgrounds[1] = new Background(-w,0,assets.background_2);
-        backgrounds[2] = new Background((-w) * 2, 0, assets.background_3);
-        backgrounds[3] = new Background((-w) * 3, 0, assets.background_4);
     }
 
 
@@ -867,16 +871,14 @@ var GF = function(){
       }, false);
 
 
-      loadAssets((assetsLoaded) => {
-        allAssetsLoaded(assetsLoaded);
         initialize();
         requestID = requestAnimationFrame(mainLoop);
-      })
     };
 
 
     return {
         start: start,
-        displayMenu : displayMenu
+        displayMenu : displayMenu,
+        allAssetsLoaded : allAssetsLoaded
     };
 };
