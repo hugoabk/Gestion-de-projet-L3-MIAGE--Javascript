@@ -3,13 +3,15 @@ var assets;
 window.onload = function init() {
   var game = new GF();
   var sound = true;
-  if(!window.localStorage.getItem('score'))
-    window.localStorage.setItem("score", "0");
-  document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
   loadAssets((assetsLoaded) => {
     game.allAssetsLoaded(assetsLoaded);
-    game.displayMenu();
-    assets.backgroundMusic.play();
+    document.getElementById("target").onclick = function(){
+      document.getElementById("target").style.display = "none";
+      assets.gunShotSound.play();
+      game.initializeScore();
+      game.displayMenu();
+      assets.backgroundMusic.play();
+    }
   })
 };
 
@@ -109,8 +111,8 @@ var GF = function(){
       }
     }
 
+
     function displayMenu() {
-      document.getElementById("myCanvasMenu").style.display = "block";
       document.getElementById("viseur").style.display = "block";
       document.getElementById("jouer").style.display = "block";
       document.getElementById("score").style.display = "block";
@@ -290,6 +292,13 @@ var GF = function(){
         score = new Score("Score : " + val_score,5,90);
         score.draw(ctx);
       }
+    }
+
+    // updates score
+    function initializeScore(){
+      if(!window.localStorage.getItem('score'))
+        window.localStorage.setItem("score", "0");
+      document.getElementById("score_value").innerHTML = "Score : " + window.localStorage.getItem('score');
     }
 
      // clears the canvas content
@@ -880,6 +889,7 @@ var GF = function(){
     return {
         start: start,
         displayMenu : displayMenu,
-        allAssetsLoaded : allAssetsLoaded
+        allAssetsLoaded : allAssetsLoaded,
+        initializeScore : initializeScore
     };
 };
