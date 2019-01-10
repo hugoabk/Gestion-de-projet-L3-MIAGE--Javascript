@@ -410,7 +410,7 @@ var GF = function () {
 
   function haveToShoot() {
     targets.forEach((t) => {
-      var v = parseInt(Math.random() * 1000);
+      var v = parseInt(Math.random() * 500);
       if (v == 1 && !t.isShooting) {
         t.isShooting = true;
         t.vx = 0;
@@ -442,7 +442,7 @@ var GF = function () {
                 cancelAnimationFrame(requestID);
                 clearShootings();
                 displayLosingScreen();
-                if (score > window.localStorage.getItem('score')){
+                if (val_score > window.localStorage.getItem('score')){
                   var name = prompt("NEW HIGHSCORE !\nPlease enter your name :");
                   if(name){
                     window.localStorage.setItem('name',name);
