@@ -111,7 +111,6 @@ var GF = function () {
     }
   }
 
-
   function displayMenu() {
     document.getElementById("myCanvasMenu").style.display = "block";
     document.getElementById("viseur").style.display = "block";
@@ -657,7 +656,7 @@ var GF = function () {
       let nOt = 4 * (i + 1);
       let speed = 0.5 + (i/2);
       let spawnInterval = 3000 - (i*200);
-      let hp = 10 + (i*2);
+      let hp = 10;
 
       let level = new Level(id, nOt, speed, hp, spawnInterval);
       Levels.push(level);
@@ -775,6 +774,8 @@ var GF = function () {
     Levels.length = 0;
     bulletHoles.length = 0;
     targets.length = 0;
+    currentLevel = 0;
+    currentBackground = 0;
     createLevels();
     createTargets(Levels[currentLevel].numberOfTargets);
     createCrates(3);

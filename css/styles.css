@@ -133,20 +133,3 @@
   display: none;
 }
 
-
-
-#myCanvas {
-	position: absolute;
-  border:1px solid;
-  background-color:lightGrey;
-  display: none;
-}
-
-#title {
-	position: absolute;
-	font-family: "Break";
-  font-size: 6em;
-	color: white;
-	top: 630px;
-	left: 150px;
-}
