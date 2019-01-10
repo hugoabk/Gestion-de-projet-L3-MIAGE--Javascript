@@ -9,7 +9,9 @@ class Crate {
     draw(ctx) {
         ctx.save();
 
+        ctx.strokeStyle ="black";
         ctx.drawImage(this.image, this.x, this.y);
+        ctx.strokeRect(this.x,this.y,128,128);
 
         ctx.restore();
     }

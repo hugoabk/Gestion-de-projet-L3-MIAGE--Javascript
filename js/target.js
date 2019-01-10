@@ -30,9 +30,13 @@ class Target {
         this.sprite.draw(ctx,this.x,this.y);
 
         ctx.fillStyle = 'red';
+        ctx.strokeStyle = "black"
         ctx.fillRect(this.x - 5, this.y - 20, this.w + 10, 10);
+        ctx.strokeRect(this.x - 5, this.y - 20, this.w + 10, 10);
+
         ctx.fillStyle = 'green';
         ctx.fillRect(this.x - 5, this.y - 20, (this.pointDV / 10) * (this.w+10), 10);
+        ctx.strokeRect(this.x - 5, this.y - 20, (this.pointDV / 10) * (this.w + 10), 10);
 
         if(this.willShoot != 0){
             ctx.strokeStyle = "red";
