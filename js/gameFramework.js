@@ -250,6 +250,7 @@ var GF = function () {
     document.getElementById("redSight").style.display = "none";
     document.getElementById("greenSight").style.display = "none";
     document.getElementById("myCanvas").style.display = "block";
+    document.getElementById("score_value").style.display = "none";
   }
 
   function displayLosingScreen() {
