@@ -19,7 +19,7 @@
 h1{
   position: absolute;
   top:750px;
-  left: 570px;
+  left: 420px;
   font-family: "Action Man";
   font-size: 60px;
   color:yellow;
@@ -27,20 +27,18 @@ h1{
 #myCanvas{
   position: absolute;
   top:100px;
-  left:525px;
+  left:375px;
   border:yellow 3px solid;
 }
 
 body {
-
-background-image:url(../assets/images/test.jpg);
-
+  background-image:url(../assets/images/test.jpg);
 }
 
 #myCanvasMenu {
   position: absolute;
   top:100px;
-  left:525px;
+  left:375px;
   background-image: url("../assets/images/menu_background.jpg");
   background-size: cover;
   border:yellow 3px solid;
@@ -49,31 +47,31 @@ background-image:url(../assets/images/test.jpg);
 #target {
   position:absolute;
   top: 180px;
-  left: 717px;
+  left: 567px;
 }
 
 #viseur {
   position: absolute;
   top : 131px;
-  left : 828px;
+  left : 678px;
 }
 
 #jouer {
   position: absolute;
   top : 338px;
-  left : 763px;
+  left : 613px;
 }
 
 #score {
   position: absolute;
   top : 450px;
-  left : 761px;
+  left : 611px;
 }
 
 #parametre {
   position: absolute;
   top : 564px;
-  left : 628px;
+  left : 478px;
 }
 
 #viseur, #jouer, #score, #parametre {
@@ -87,61 +85,61 @@ background-image:url(../assets/images/test.jpg);
 #back {
   position:absolute;
   top:130px;
-  left:556px;
+  left:406px;
 
 }
 #sound {
   position: absolute;
   top : 339px;
-  left : 604px;
+  left : 454px;
 }
 
 #gameOver {
   position: absolute;
   top : 170px;
-  left : 663px;
+  left : 513px;
 }
 
 #aim {
   position: absolute;
   top : 481px;
-  left : 603px;
+  left : 453px;
 }
 
 #speaker {
   position: absolute;
   top : 375px;
-  left : 1126px;
+  left : 976px;
 }
 
 #mute {
   position: absolute;
   top : 375px;
-  left : 1126px;
+  left : 976px;
 }
 
 #yellowSight, #yellowSquare{
   position: absolute;
   top : 515px;
-  left : 1001px;
+  left : 851px;
 }
 
 #redSight, #redSquare{
   position: absolute;
   top : 515px;
-  left : 1132px;
+  left : 982px;
 }
 
 #greenSight, #greenSquare{
   position: absolute;
   top : 515px;
-  left : 1260px;
+  left : 1110px;
 }
 
 #score_value {
   position: absolute;
   top : 436px;
-  left : 716px;
+  left : 566px;
   color: white;
   font-family: "Break";
   font-size: 3em;
@@ -150,7 +148,7 @@ background-image:url(../assets/images/test.jpg);
 #play {
   position: absolute;
   top: 370px;
-  left: 904px;
+  left: 754px;
 }
 
 #sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #score_value, #play, #gameOver, #myCanvas{

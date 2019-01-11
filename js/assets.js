@@ -1,5 +1,5 @@
 var assetsToLoadURLs = {
-    gunShotSound: { url: "assets/audio/gunShotSound.mp3", buffer: false, loop: false, volume: 1.0 },
+    gunShotSound: { url: "assets/audio/pew.mp3", buffer: false, loop: false, volume: 1.0 },
     emptyGunSound: { url: "assets/audio/emptyGunSound.wav", buffer: false, loop: false, volume: 1.0 },
     reloadSound: { url: "assets/audio/reloadSound.wav", buffer : false, loop: true, volume :1.0},
     backgroundMusic: { url: "assets/audio/blue.mp3", buffer : false, loop: true, volume :0.2},

@@ -410,7 +410,7 @@ var GF = function () {
 
   function haveToShoot() {
     targets.forEach((t) => {
-      var v = parseInt(Math.random() * 500);
+      var v = parseInt(Math.random() * 300);
       if (v == 1 && !t.isShooting) {
         t.isShooting = true;
         t.vx = 0;
@@ -432,12 +432,14 @@ var GF = function () {
   function isHittingYou() {
     targets.forEach((t) => {
       if (t.isShooting === true && t.willShoot === 0) {
-        let v = parseInt(Math.random() * 500);
+        let v = parseInt(Math.random() * 300);
         if (v == 1) {
           t.isHittingYou = true;
           t.willShoot = setInterval(function () {
             if (!takeCover.isSafe()) {
-              healthpoint -= 10;
+              if(isRunning){
+                healthpoint -= 10;
+              }
               if (healthpoint <= 0) {
                 cancelAnimationFrame(requestID);
                 clearShootings();
