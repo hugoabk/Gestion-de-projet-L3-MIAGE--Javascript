@@ -1,3 +1,4 @@
+ //var for assets
 var assets;
 // Inits
 window.onload = function init() {
@@ -57,9 +58,6 @@ var GF = function () {
   var isReloading = false;
   var idReload;
 
-  //var for assets
-  //var assets;
-
   // vars for levels
   var Levels = [];
   var currentLevel = 0;
@@ -77,6 +75,8 @@ var GF = function () {
   var crates = [];
   var floor;
   var bulletHoles = [];
+
+  // var requested to cancel the animation
   var requestID;
 
   var measureFPS = function (newTime) {
@@ -87,7 +87,7 @@ var GF = function () {
       return;
     }
 
-    //calculate the difference between last & current frame
+    //calculates the difference between last & current frame
     var diffTime = newTime - lastTime;
 
     if (diffTime >= 1000) {
@@ -99,7 +99,7 @@ var GF = function () {
     frameCount++;
   };
 
-  // display FPS
+  // displays FPS
   function displayFPS() {
     if (fps !== undefined) {
       ctx.save();
@@ -110,7 +110,7 @@ var GF = function () {
       ctx.restore();
     }
   }
-
+  // displays the main menu
   function displayMenu() {
     document.getElementById("myCanvasMenu").style.display = "block";
     document.getElementById("viseur").style.display = "block";
@@ -119,6 +119,7 @@ var GF = function () {
     document.getElementById("parametre").style.display = "block";
 
     var play = document.getElementById("jouer");
+    // Launches the game or resume the game when you click on play
     play.onclick = function () {
       hideMenu();
 
@@ -131,6 +132,7 @@ var GF = function () {
     };
 
     var score_menu = document.getElementById("score");
+    // displays the highscore when you click on score
     score_menu.onclick = function () {
       document.getElementById("jouer").style.display = "none";
       document.getElementById("score").style.display = "none";
@@ -140,6 +142,7 @@ var GF = function () {
     };
 
     var parameter = document.getElementById("parametre");
+    // displays the parameters when you click on parameter
     parameter.onclick = function () {
       document.getElementById("jouer").style.display = "none";
       document.getElementById("score").style.display = "none";
@@ -209,7 +212,7 @@ var GF = function () {
       document.getElementById("speaker").style.display = "block";
     };
 
-
+    // back button used for going back to the menu
     var back = document.getElementById("back");
     back.onclick = function () {
       document.getElementById("jouer").style.display = "block";
@@ -230,7 +233,7 @@ var GF = function () {
     };
 
   }
-
+  // hides every menu elements
   function hideMenu() {
     document.getElementById("myCanvasMenu").style.display = "none";
     document.getElementById("viseur").style.display = "none";
@@ -252,15 +255,18 @@ var GF = function () {
     document.getElementById("score_value").style.display = "none";
   }
 
+  // displays the game over screen
   function displayLosingScreen() {
     document.getElementById("myCanvasMenu").style.display = "block";
     document.getElementById("gameOver").style.display = "block";
   }
 
+  // updates the score element with the value from the local storage
   function updateScore() {
     document.getElementById("score_value").innerHTML = "Highscore : " + window.localStorage.getItem('name') + " - " + window.localStorage.getItem('score');
   }
 
+  // allows the main animation to pause / resume
   function togglePause() {
     isRunning = !isRunning;
 
@@ -269,13 +275,14 @@ var GF = function () {
     }
   }
 
+  // add value to the score in game
   function addScore(inc) {
     var new_val = Number(val_score);
     new_val += inc;
     val_score = new_val.toString();
   }
 
-  // display healthpoint
+  // displays the health points in game
   function displayHealthPoints() {
     ctx.save();
 
@@ -284,7 +291,7 @@ var GF = function () {
 
     ctx.restore();
   }
-  // display Score
+  // displays the score
   function displayScore() {
     if (val_score !== undefined) {
       score = new Score("Score : " + val_score, 5, 90);
@@ -292,10 +299,11 @@ var GF = function () {
     }
   }
 
-  // updates score
+  // initialize score and name in the local storage
   function initializeScore() {
     if (!window.localStorage.getItem('score'))
       window.localStorage.setItem("score", "0");
+      window.localStorage.setItem("name", "DEFAULT");
     document.getElementById("score_value").innerHTML = "Highscore : " + window.localStorage.getItem('name') + " - " + window.localStorage.getItem('score');
   }
 
@@ -305,7 +313,7 @@ var GF = function () {
   }
 
   // CRATES
-  // create crates
+  // creates crates
   function createCrates(n) {
     for (let i = 0; i < n; i++) {
       let x = 40 + (i * 300);
@@ -317,14 +325,14 @@ var GF = function () {
     }
   }
 
-  // draw crates
+  // draws crates
   function drawCrates() {
     crates.forEach((c) => {
       c.draw(ctx);
     })
   }
 
-  //draw bullet hole
+  //draws bullet holes
   function drawBulletHoles() {
     bulletHoles.forEach((b) => {
       ctx.save();
@@ -337,20 +345,20 @@ var GF = function () {
   }
 
   // TARGETS
-  // create targets
+  // creates targets
   function createTargets(n) {
     var timeO = Levels[currentLevel].spawnInterval;
-    // Create the first target
+    // Creates the first target
     createTarget();
-    // Create the others every 3s.
+    // Creates the others every 3s.
     for (let i = 0; i < n - 1; i++) {
       setTimeout(createTarget, timeO);
       timeO += Levels[currentLevel].spawnInterval;
     }
   }
-
+  // create one target
   function createTarget() {
-    // generate random in order to choose a side (left or right)
+    // generates random in order to choose a side (left or right)
     let v = Math.floor(Math.random() * (2 - 1 + 1)) + 1;
     if (v === 1) {
 
@@ -381,7 +389,7 @@ var GF = function () {
     id++;
   }
 
-  // draw targets
+  // draws targets
   function drawTargets() {
     targets.forEach((t) => {
       t.draw(ctx);
@@ -408,10 +416,11 @@ var GF = function () {
     });
   }
 
+  // generates a random number for each target in order to know if they should shoot at the player or not
   function haveToShoot() {
     targets.forEach((t) => {
       var v = parseInt(Math.random() * 300);
-      if (v == 1 && !t.isShooting) {
+      if (v === 1 && !t.isShooting) {
         t.isShooting = true;
         t.vx = 0;
         t.sprite = new Sprite("tir");
@@ -420,7 +429,7 @@ var GF = function () {
       }
     });
   }
-
+  // clear all the shootings (when the game is over for instance)
   function clearShootings() {
     targets.forEach((t) => {
       if (t.willShoot !== 0) {
@@ -428,30 +437,33 @@ var GF = function () {
       }
     })
   }
-
+ // generates a random number for each target in order to know if they should hit the player or not
   function isHittingYou() {
     targets.forEach((t) => {
       if (t.isShooting === true && t.willShoot === 0) {
         let v = parseInt(Math.random() * 300);
-        if (v == 1) {
+        if (v === 1) {
           t.isHittingYou = true;
+          // the target will hit you every 3 seconds
           t.willShoot = setInterval(function () {
             if (!takeCover.isSafe()) {
               if(isRunning){
                 healthpoint -= 10;
               }
+              // if the player is dead
               if (healthpoint <= 0) {
                 cancelAnimationFrame(requestID);
                 clearShootings();
                 document.getElementById("myCanvas").style.display = "none";
                 displayLosingScreen();
+                // updates score in the storage is the new score is superior
                 if (val_score > window.localStorage.getItem('score')){
                   var name = prompt("NEW HIGHSCORE !\nPlease enter your name :");
                   if(name){
                     window.localStorage.setItem('name',name);
                   }
                   else{
-                    window.localStorage.setItem('name',"GHOST");
+                    window.localStorage.setItem('name', "UNKNOWN");
                   }
                   window.localStorage.setItem("score", val_score);
                   updateScore();
@@ -467,10 +479,10 @@ var GF = function () {
       }
     });
   }
-
+  // displays the red frame when the player is hit by the target
   function displayWarning() {
     targets.forEach((t) => {
-      if (t.isHittingYou == true) {
+      if (t.isHittingYou === true) {
         ctx.save();
 
         ctx.strokeStyle = 'red';
@@ -482,18 +494,16 @@ var GF = function () {
       }
     });
   }
-
+  // checks if the gun has to be reloaded or not when the player hit the R key
   function checkForReload() {
     if (inputStates.r === true) {
       if (magazine.capacity < magazine.capacityMax) {
         reloading = true;
       }
-      else {
-        // if capacity already full
-      }
     }
-
+    // if the gun is not full and the player asked a reload
     if (magazine.capacity < magazine.capacityMax && reloading === true) {
+      // if the gun is not already being reloaded, reload it
       if (isReloading === false) {
         if (isSoundOn) {
           assets.reloadSound.play();
@@ -502,6 +512,7 @@ var GF = function () {
         isReloading = true;
       }
     }
+    // else the gun is full, stop the reloading
     else {
       clearInterval(idReload);
       isReloading = false;
@@ -511,7 +522,7 @@ var GF = function () {
       }
     }
   }
-
+  // reload the gun one ammo by one ammo
   function reload() {
     magazine.capacity += 1;
   }
@@ -525,6 +536,7 @@ var GF = function () {
           assets.gunShotSound.play();
         }
         magazine.capacity -= 1;
+        // if the player is hitting a crate, isCrateHit = true
         crates.forEach((c) => {
           if (inputStates.mousePos.x >= c.x && inputStates.mousePos.x <= c.x + 128
             && inputStates.mousePos.y >= c.y && inputStates.mousePos.y <= c.y + 128) {
@@ -532,10 +544,13 @@ var GF = function () {
             isCrateHit = true;
           }
         })
+        // if the player is not hitting a crate
         if (isCrateHit === false) {
           targets.forEach((t) => {
+            // defines the hitbox for each case, when the target is shooting, moving to the left, moving the right
             switch (t.action) {
               case "tir":
+              // headshot
                 if (inputStates.mousePos.x > t.x + t.w * 35 / 100 && inputStates.mousePos.x < t.x + t.w * 62 / 100
                   && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
 
@@ -555,6 +570,7 @@ var GF = function () {
                 break;
 
               case "right":
+              // headshot
                 if (inputStates.mousePos.x > t.x + t.w * 45 / 100 && inputStates.mousePos.x < t.x + t.w * 78 / 100
                   && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
 
@@ -574,6 +590,7 @@ var GF = function () {
                 break;
 
               case "left":
+              // headshot
                 if (inputStates.mousePos.x > t.x + t.w * 25 / 100 && inputStates.mousePos.x < t.x + t.w * 58 / 100
                   && inputStates.mousePos.y > t.y && inputStates.mousePos.y < t.y + t.h * 20 / 100) {
 
@@ -593,7 +610,7 @@ var GF = function () {
                 break;
 
             }
-
+            // if the target is dead
             if (t.pointDV <= 0) {
               let index = targets.findIndex(item => item.id === t.id);
               targets[index].sprite = new Sprite("explosion");
@@ -622,7 +639,7 @@ var GF = function () {
     takeCover.draw(ctx);
   }
 
-  // update the cover state
+  // updates the cover state
   function takeCoverUpdate() {
     if (inputStates.shift === true) {
       takeCover.moveToTheTop(h);
@@ -632,13 +649,13 @@ var GF = function () {
     }
   }
 
-  // draw background
+  // draws background
   function drawBackgrounds() {
     backgrounds.forEach((b) => {
       b.draw(ctx, w, h);
     })
   }
-
+  // moves the backgrounds until the next background is displaying on the canvas
   function moveBackgrounds() {
     if (backgrounds[currentBackground + 1].x <= 0) {
       backgrounds.forEach((b) => {
@@ -653,6 +670,8 @@ var GF = function () {
       createCrates(3);
     }
   }
+
+  // creates all the levels, defining the difficulty with several parameters
   function createLevels() {
     for (let i = 0; i < 14; i++) {
       let id = 1 + i;
@@ -665,7 +684,7 @@ var GF = function () {
       Levels.push(level);
     }
   }
-  // switch level
+  // switches to the next level
   function nextLevel() {
     backgroundsAreMoving = true;
     currentLevel += 1;
@@ -674,6 +693,7 @@ var GF = function () {
     bulletHoles.length = 0;
     idBackground = setInterval(moveBackgrounds, 1000 / 60);
   }
+  
   // MAIN LOOP
 
   var mainLoop = function (time) {
@@ -685,36 +705,38 @@ var GF = function () {
     // draw background
     drawBackgrounds();
 
+    // if there is no switch to the next level
     if (backgroundsAreMoving === false) {
-      // display the fps on the top-left corner
+      // displays the fps on the top-left corner
       displayFPS();
 
-      // display the player's healthpoints
+      // displays the player's healthpoints
       displayHealthPoints();
 
-      // display the score on the top-left corner
+      // displays the score on the top-left corner
       displayScore();
 
-      // draw Magazine
+      // draws Magazine
       drawMagazine();
 
-      // draw the targets
+      // draws the targets
       drawTargets();
 
-      // draw the crates
+      // draws the crates
       drawCrates();
       drawBulletHoles();
 
-      // take cover
+      // draws the cover
       drawTakeCover();
 
-      // draw the weapon sight
+      // draws the weapon sight
       drawSight();
 
-      // display warning
+      // displays warning
       displayWarning();
     }
     else {
+      // displays the black frame and the "Level X"
       ctx.save()
 
       ctx.fillStyle = "black";
@@ -725,7 +747,7 @@ var GF = function () {
       ctx.fillText("Level " + (currentLevel + 1) + " / 14", (w/2) - 200, h/2);
       ctx.restore();
     }
-    // Check inputs and update the game state
+    // Checks inputs and update the game state
     updateGameState();
 
     // call the animation loop every 1/60th of second
@@ -734,7 +756,7 @@ var GF = function () {
     }
   };
 
-  // Update the game components
+  // Updates the game components
   function updateGameState() {
     targetsAndMagazineUpdate();
     takeCoverUpdate();
@@ -755,7 +777,7 @@ var GF = function () {
     magazine.draw(ctx);
   }
 
-
+  // Initializes the game elements
   function initialize() {
     backgrounds[0] = new Background(0, 0, assets.backgroundBase, h - 300);
     backgrounds[1] = new Background(-w, 0, assets.backgroundForest, h - 300);
@@ -792,9 +814,9 @@ var GF = function () {
   }
 
 
-  // Draw the weapon sight is the mouse position is in the canvas
+  // Draws the weapon sight if the mouse position is in the canvas
   function drawSight() {
-    if (inputStates.mousePos != undefined) {
+    if (inputStates.mousePos !== undefined) {
       let x = inputStates.mousePos.x;
       let y = inputStates.mousePos.y;
 
@@ -816,7 +838,7 @@ var GF = function () {
       ctx.restore();
     }
   }
-
+ // gets the mouse position
   function getMousePos(event) {
     var rect = canvas.getBoundingClientRect();
     // If the mouse position is in the canvas then it returns the position
@@ -845,10 +867,8 @@ var GF = function () {
 
     ctx = canvas.getContext('2d');
 
-    ctx.font = "20px Arial";
 
-
-    // Add the listeners for the reloading key and the take cover key
+    // Add the listeners for the reloading key, the escape (pause) key and the take cover key
 
     window.addEventListener('keydown', function (event) {
       switch (event.keyCode) {
@@ -913,7 +933,7 @@ var GF = function () {
     requestID = requestAnimationFrame(mainLoop);
   };
 
-
+  // returns all the functions we have to use outside of the game framework
   return {
     start: start,
     displayMenu: displayMenu,

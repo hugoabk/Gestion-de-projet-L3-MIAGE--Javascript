@@ -35,7 +35,7 @@ class TakeCover {
             this.y = this.h;
         }
     }
-
+    /* Return true if the cover is up */
     isSafe(){
         if(this.y <= (this.h/2)){
             return true;

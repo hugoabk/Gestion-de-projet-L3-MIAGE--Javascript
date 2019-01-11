@@ -1,3 +1,4 @@
+/* FONTS */
 @font-face {
 	font-family: "Break";
 	src: url('break_semibold.ttf');
@@ -16,6 +17,12 @@
 	src: url('Action Man Extended Bold Italic.ttf');
 }
 
+/* BACKGROUND IMAGE */
+body {
+  background-image:url(../assets/images/background.jpg);
+}
+
+/* TITLE */
 h1{
   position: absolute;
   top:750px;
@@ -24,15 +31,14 @@ h1{
   font-size: 60px;
   color:yellow;
 }
+
+/* CANVAS */
+
 #myCanvas{
   position: absolute;
   top:100px;
   left:375px;
   border:yellow 3px solid;
-}
-
-body {
-  background-image:url(../assets/images/test.jpg);
 }
 
 #myCanvasMenu {
@@ -44,11 +50,20 @@ body {
   border:yellow 3px solid;
 }
 
+/* FIRST VIEW */
+#play {
+  position: absolute;
+  top: 370px;
+  left: 754px;
+}
+
 #target {
   position:absolute;
   top: 180px;
   left: 567px;
 }
+
+/* MENU */
 
 #viseur {
   position: absolute;
@@ -78,9 +93,7 @@ body {
   display: none;
 }
 
-#jouer:hover, #score:hover, #parametre:hover, #play:hover  {
-  opacity : 0.5;
-}
+/* PARAMETERS */
 
 #back {
   position:absolute;
@@ -92,12 +105,6 @@ body {
   position: absolute;
   top : 339px;
   left : 454px;
-}
-
-#gameOver {
-  position: absolute;
-  top : 170px;
-  left : 513px;
 }
 
 #aim {
@@ -135,7 +142,14 @@ body {
   top : 515px;
   left : 1110px;
 }
+ /* GAME OVER */
+#gameOver {
+  position: absolute;
+  top : 170px;
+  left : 513px;
+}
 
+/* SCORE */
 #score_value {
   position: absolute;
   top : 436px;
@@ -145,13 +159,11 @@ body {
   font-size: 3em;
 }
 
-#play {
-  position: absolute;
-  top: 370px;
-  left: 754px;
-}
-
 #sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #score_value, #play, #gameOver, #myCanvas{
   display: none;
+}
+
+#jouer:hover, #score:hover, #parametre:hover, #play:hover  {
+  opacity : 0.5;
 }
 

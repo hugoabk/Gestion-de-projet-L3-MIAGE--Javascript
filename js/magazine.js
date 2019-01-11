@@ -1,4 +1,3 @@
-
 // Magazine Object
 class Magazine {
     constructor(capacityMax, image) {
