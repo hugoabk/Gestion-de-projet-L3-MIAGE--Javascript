@@ -441,6 +441,7 @@ var GF = function () {
               if (healthpoint <= 0) {
                 cancelAnimationFrame(requestID);
                 clearShootings();
+                document.getElementById("myCanvas").style.display = "none";
                 displayLosingScreen();
                 if (val_score > window.localStorage.getItem('score')){
                   var name = prompt("NEW HIGHSCORE !\nPlease enter your name :");
@@ -833,7 +834,7 @@ var GF = function () {
 
   var start = function () {
 
-
+    document.getElementById("myCanvas").style.display = "block";
     canvas = document.querySelector("#myCanvas");
     canvas.style.cursor = "none";
 
@@ -864,11 +865,13 @@ var GF = function () {
               }
             }
             togglePause();
+            document.getElementById("myCanvas").style.display = "none";
             displayMenu();
           }
           else {
             togglePause();
             hideMenu();
+            document.getElementById("myCanvas").style.display = "block";
             isReloading = false;
           }
           break;

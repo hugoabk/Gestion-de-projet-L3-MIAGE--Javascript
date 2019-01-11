@@ -9,47 +9,71 @@
 	src: url('reak_bold.ttf');
 }
 
-#myCanvasBackGround {
-	position: absolute;
-	width : 100%;
-	height : 100%;
-	background-color: black;
+@font-face {
+	font-family: "Action Man";
+  font-weight: bold;
+  font-style: italic;
+	src: url('Action Man Extended Bold Italic.ttf');
+}
+
+h1{
+  position: absolute;
+  top:750px;
+  left: 570px;
+  font-family: "Action Man";
+  font-size: 60px;
+  color:yellow;
+}
+#myCanvas{
+  position: absolute;
+  top:100px;
+  left:525px;
+  border:yellow 3px solid;
+}
+
+body {
+
+background-image:url(../assets/images/test.jpg);
+
 }
 
 #myCanvasMenu {
   position: absolute;
+  top:100px;
+  left:525px;
   background-image: url("../assets/images/menu_background.jpg");
   background-size: cover;
+  border:yellow 3px solid;
 }
 
 #target {
   position:absolute;
-  top: 5em;
-  left: 12em;
+  top: 180px;
+  left: 717px;
 }
 
 #viseur {
   position: absolute;
-  top : 2em;
-  left : 19em;
+  top : 131px;
+  left : 828px;
 }
 
 #jouer {
   position: absolute;
-  top : 15em;
-  left : 15em;
+  top : 338px;
+  left : 763px;
 }
 
 #score {
   position: absolute;
-  top : 22em;
-  left : 15em;
+  top : 450px;
+  left : 761px;
 }
 
 #parametre {
   position: absolute;
-  top : 29em;
-  left : 6.5em;
+  top : 564px;
+  left : 628px;
 }
 
 #viseur, #jouer, #score, #parametre {
@@ -62,62 +86,62 @@
 
 #back {
   position:absolute;
-  top:2em;
-  left:1em;
+  top:130px;
+  left:556px;
 
 }
 #sound {
   position: absolute;
-  top : 15em;
-  left : 5em;
+  top : 339px;
+  left : 604px;
 }
 
 #gameOver {
   position: absolute;
-  top : 5em;
-  left : 8em;
+  top : 170px;
+  left : 663px;
 }
 
 #aim {
   position: absolute;
-  top : 24em;
-  left : 5em;
+  top : 481px;
+  left : 603px;
 }
 
 #speaker {
   position: absolute;
-  top : 17em;
-  left : 38em;
+  top : 375px;
+  left : 1126px;
 }
 
 #mute {
   position: absolute;
-  top : 17em;
-  left : 38em;
+  top : 375px;
+  left : 1126px;
 }
 
 #yellowSight, #yellowSquare{
   position: absolute;
-  top : 26em;
-  left : 30em;
+  top : 515px;
+  left : 1001px;
 }
 
 #redSight, #redSquare{
   position: absolute;
-  top : 26em;
-  left : 38em;
+  top : 515px;
+  left : 1132px;
 }
 
 #greenSight, #greenSquare{
   position: absolute;
-  top : 26em;
-  left : 46em;
+  top : 515px;
+  left : 1260px;
 }
 
 #score_value {
   position: absolute;
-  top : 7em;
-  left : 4em;
+  top : 436px;
+  left : 716px;
   color: white;
   font-family: "Break";
   font-size: 3em;
@@ -125,11 +149,11 @@
 
 #play {
   position: absolute;
-  top: 17em;
-  left: 380px;
+  top: 370px;
+  left: 904px;
 }
 
-#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #gameOver, #score_value, #play{
+#sound, #aim, #back, #speaker, #mute, #yellowSight, #redSight, #greenSight, #yellowSquare, #redSquare, #greenSquare, #score_value, #play, #gameOver, #myCanvas{
   display: none;
 }
 
