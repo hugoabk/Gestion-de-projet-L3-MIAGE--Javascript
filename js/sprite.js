@@ -25,18 +25,17 @@ function SpriteImage(img, x, y, width, height) {
     this.delayBetweenFrames = 1000/6;
 
     this.extractSprites = function(spritesheet) {
+      //on creer tous les sprites
       switch (stringsprite) {
-
+        //l'ennemi se deplace vers la gauche
         case "left":
-        // position de base pas implémenté
+        // position des parties de la spritesheet que l'on va decouper
         var left = new SpriteImage(spritesheet, 280 , 135, 45, 55);
-
-
         var left2 = new SpriteImage(spritesheet, 97 , 134, 45, 55);
         var left3 = new SpriteImage(spritesheet, 145 , 68, 45, 55);
         var left4 = new SpriteImage(spritesheet, 97 , 4, 45, 55);
 
-
+        //on met toutes les images dans un tableau pour boucler dedans
         this.spriteArray.push(left2);
         this.spriteArray.push(left3);
         this.spriteArray.push(left4);
@@ -46,10 +45,13 @@ function SpriteImage(img, x, y, width, height) {
 
         break;
 
+        //l'ennemi tir
         case "tir":
-
+        // position des parties de la spritesheet que l'on va decouper
         var tir1 = new SpriteImage(spritesheet, 234 , 134, 45, 55);
         var tir2 = new SpriteImage(spritesheet, 468 , 134, 45, 55);
+
+        //on met toutes les images dans un tableau pour boucler dedans
         this.spriteArray.push(tir1);
         this.spriteArray.push(tir1);
         this.spriteArray.push(tir1);
@@ -59,12 +61,16 @@ function SpriteImage(img, x, y, width, height) {
         this.spriteArray.push(tir2);
         break;
 
+        //l'ennemi n'a plus de point de vie
         case "explosion":
 
+        // position des parties de la spritesheet que l'on va decouper
         var explosion1 = new SpriteImage(spritesheet, 280 , 313, 45, 55);
         var explosion2 = new SpriteImage(spritesheet, 330 , 315, 45, 55);
         var explosion3 = new SpriteImage(spritesheet, 390 , 312, 45, 55);
         var explosion4 = new SpriteImage(spritesheet, 450 , 312, 45, 55);
+
+        //on met toutes les images dans un tableau pour boucler dedans
         this.spriteArray.push(explosion1);
         this.spriteArray.push(explosion1);
         this.spriteArray.push(explosion1);
@@ -80,14 +86,15 @@ function SpriteImage(img, x, y, width, height) {
         break;
 
 
-        // marche uniquement avec la deuxième image
+        //l'ennemi se deplace vers la droite
         case "right":
 
+        // position des parties de la spritesheet que l'on va decouper
         var right2 = new SpriteImage(spritesheet, 492 , 134, 45, 55);
         var right3 = new SpriteImage(spritesheet, 442 , 68, 45, 55);
         var right4 = new SpriteImage(spritesheet, 492 , 4, 45, 55);
 
-
+        //on met toutes les images dans un tableau pour boucler dedans
         this.spriteArray.push(right2);
         this.spriteArray.push(right3);
         this.spriteArray.push(right4);

@@ -561,7 +561,7 @@ var GF = function () {
                     addScore(20);
                   }
                   t.pointDV = 0;
-
+              //bodyshot
                 } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 72 / 100
                   && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
                   t.pointDV -= 4;
@@ -581,7 +581,7 @@ var GF = function () {
                     addScore(20);
                   }
                   t.pointDV = 0;
-
+                //bodyshot
                 } else if (inputStates.mousePos.x > t.x + t.w * 32 / 100 && inputStates.mousePos.x < t.x + t.w * 78 / 100
                   && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
                   t.pointDV -= 4;
@@ -601,7 +601,7 @@ var GF = function () {
                     addScore(20);
                   }
                   t.pointDV = 0;
-
+              //bodyshot
                 } else if (inputStates.mousePos.x > t.x + t.w * 28 / 100 && inputStates.mousePos.x < t.x + t.w * 74 / 100
                   && inputStates.mousePos.y > t.y + t.h * 21 / 100 && inputStates.mousePos.y < t.y + t.h) {
                   t.pointDV -= 4;
@@ -693,7 +693,7 @@ var GF = function () {
     bulletHoles.length = 0;
     idBackground = setInterval(moveBackgrounds, 1000 / 60);
   }
-  
+
   // MAIN LOOP
 
   var mainLoop = function (time) {
