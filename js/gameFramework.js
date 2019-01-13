@@ -36,7 +36,7 @@ var GF = function () {
 
   // vars for handling parameters
   var isSoundOn = true;
-  var sightColor = "green";
+  var sightColor = "red";
 
   // vars for handling inputs
   var inputStates = {};
@@ -457,7 +457,10 @@ var GF = function () {
                 document.getElementById("myCanvas").style.display = "none";
                 displayLosingScreen();
                 // updates score in the storage is the new score is superior
-                if (val_score > window.localStorage.getItem('score')){
+                console.log(Number(window.localStorage.getItem('score')));
+                console.log(Number(val_score) > Number(window.localStorage.getItem('score')));
+                if (val_score > Number(window.localStorage.getItem('score'))){
+                  console.log("in");
                   var name = prompt("NEW HIGHSCORE !\nPlease enter your name :");
                   if(name){
                     window.localStorage.setItem('name',name);
